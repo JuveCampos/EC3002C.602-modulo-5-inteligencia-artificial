@@ -1,0 +1,385 @@
+entidad_federativa,mes,accidentes,danios_materiales_millones,heridos,muertos
+Aguascalientes,enero,17,0.738,21,3
+Aguascalientes,febrero,15,0.713,16,2
+Aguascalientes,marzo,14,0.3743,10,1
+Aguascalientes,abril,13,0.4145,7,1
+Aguascalientes,mayo,13,0.547,15,0
+Aguascalientes,junio,15,0.78,8,0
+Aguascalientes,julio,8,0.734,7,3
+Aguascalientes,agosto,17,1.182,24,14
+Aguascalientes,septiembre,14,0.5215,15,4
+Aguascalientes,octubre,11,1.193,12,4
+Aguascalientes,noviembre,15,1.4555,31,8
+Aguascalientes,diciembre,27,1.6742,34,9
+Baja California,enero,31,2.7025,11,9
+Baja California,febrero,26,0.9035,11,9
+Baja California,marzo,29,1.1975,32,2
+Baja California,abril,27,2.246,12,12
+Baja California,mayo,27,1.0942,21,3
+Baja California,junio,33,1.519,29,9
+Baja California,julio,34,1.737,19,10
+Baja California,agosto,30,2.564,12,4
+Baja California,septiembre,37,2.081,25,4
+Baja California,octubre,36,2.999,22,5
+Baja California,noviembre,28,1.61,15,9
+Baja California,diciembre,39,1.8925,30,7
+Baja California Sur,enero,18,0.658,9,0
+Baja California Sur,febrero,20,1.0423,9,6
+Baja California Sur,marzo,14,0.498,6,4
+Baja California Sur,abril,26,1.0765,26,8
+Baja California Sur,mayo,16,1.2,10,2
+Baja California Sur,junio,13,0.472,11,2
+Baja California Sur,julio,26,0.979,19,7
+Baja California Sur,agosto,11,0.81,6,3
+Baja California Sur,septiembre,15,1.115,8,2
+Baja California Sur,octubre,18,0.758,10,5
+Baja California Sur,noviembre,11,0.3895,14,2
+Baja California Sur,diciembre,13,0.595,12,6
+Campeche,enero,18,1.72,15,6
+Campeche,febrero,15,0.9075,13,7
+Campeche,marzo,17,1.55,6,0
+Campeche,abril,23,2.973,11,4
+Campeche,mayo,16,1.528,5,7
+Campeche,junio,13,0.8205,14,1
+Campeche,julio,19,2.247,17,1
+Campeche,agosto,14,1.75,12,0
+Campeche,septiembre,17,0.7212,5,3
+Campeche,octubre,13,0.624,2,1
+Campeche,noviembre,9,0.721,3,1
+Campeche,diciembre,21,1.356,9,2
+Chiapas,enero,58,3.523,29,3
+Chiapas,febrero,64,3.764,13,5
+Chiapas,marzo,76,8.997,52,11
+Chiapas,abril,59,4.14,25,18
+Chiapas,mayo,51,2.886,79,22
+Chiapas,junio,35,2.655,20,10
+Chiapas,julio,48,2.8021,26,4
+Chiapas,agosto,72,4.9055,37,4
+Chiapas,septiembre,54,3.687,30,12
+Chiapas,octubre,54,2.901,38,5
+Chiapas,noviembre,40,2.547,26,12
+Chiapas,diciembre,65,6.0605,46,10
+Chihuahua,enero,27,2.744,16,7
+Chihuahua,febrero,24,2.216,13,2
+Chihuahua,marzo,38,6.831,26,13
+Chihuahua,abril,43,2.205,21,7
+Chihuahua,mayo,47,3.707,35,12
+Chihuahua,junio,44,4.2955,30,15
+Chihuahua,julio,55,7.165,35,14
+Chihuahua,agosto,32,3.5395,20,9
+Chihuahua,septiembre,29,1.918,12,13
+Chihuahua,octubre,35,3.814,34,8
+Chihuahua,noviembre,32,3.035,28,10
+Chihuahua,diciembre,50,4.5902,31,14
+Ciudad De Mexico,enero,2,0.072,0,1
+Ciudad De Mexico,febrero,8,0.523,15,3
+Ciudad De Mexico,marzo,6,0.385,9,4
+Ciudad De Mexico,abril,8,0.305,6,2
+Ciudad De Mexico,mayo,4,0.16,3,1
+Ciudad De Mexico,junio,4,0.135,3,0
+Ciudad De Mexico,julio,7,0.282,8,0
+Ciudad De Mexico,agosto,6,1.09,7,2
+Ciudad De Mexico,septiembre,7,0.9855,4,1
+Ciudad De Mexico,octubre,8,0.673,3,1
+Ciudad De Mexico,noviembre,2,0.285,14,1
+Ciudad De Mexico,diciembre,5,0.3805,6,3
+Coahuila,enero,12,1.359,7,3
+Coahuila,febrero,10,0.246,9,4
+Coahuila,marzo,24,1.478,27,12
+Coahuila,abril,11,0.62,10,2
+Coahuila,mayo,11,0.824,6,3
+Coahuila,junio,15,0.617,9,11
+Coahuila,julio,13,0.61,9,3
+Coahuila,agosto,10,0.74,10,7
+Coahuila,septiembre,12,0.2895,7,3
+Coahuila,octubre,26,1.6847,21,11
+Coahuila,noviembre,16,0.811,21,8
+Coahuila,diciembre,11,0.646,22,2
+Colima,enero,11,1.3205,6,2
+Colima,febrero,20,0.903,10,4
+Colima,marzo,17,0.6975,36,1
+Colima,abril,8,1.1215,10,2
+Colima,mayo,13,1.001,6,2
+Colima,junio,16,3.426,14,2
+Colima,julio,18,1.617,15,6
+Colima,agosto,20,2.5455,8,6
+Colima,septiembre,10,0.383,6,1
+Colima,octubre,4,0.855,2,2
+Colima,noviembre,15,2.197,6,4
+Colima,diciembre,15,1.378,19,2
+Durango,enero,12,2.065,10,3
+Durango,febrero,14,1.687,21,2
+Durango,marzo,22,3.303,34,11
+Durango,abril,20,2.644,35,9
+Durango,mayo,15,2.24,16,4
+Durango,junio,24,2.671,23,9
+Durango,julio,26,3.03,49,10
+Durango,agosto,21,1.7735,30,9
+Durango,septiembre,14,0.813,20,5
+Durango,octubre,19,2.6306,20,4
+Durango,noviembre,23,1.7155,22,4
+Durango,diciembre,15,1.365,14,6
+Estado Mexico,enero,56,5.0115,63,13
+Estado Mexico,febrero,47,2.89,51,19
+Estado Mexico,marzo,59,4.224,45,19
+Estado Mexico,abril,52,5.042,23,14
+Estado Mexico,mayo,54,7.024,40,26
+Estado Mexico,junio,56,5.678,33,7
+Estado Mexico,julio,51,5.4995,28,10
+Estado Mexico,agosto,49,5.964,48,23
+Estado Mexico,septiembre,49,5.5035,58,17
+Estado Mexico,octubre,37,4.4895,20,11
+Estado Mexico,noviembre,47,12.108,50,22
+Estado Mexico,diciembre,44,4.36,31,14
+Guanajuato,enero,53,3.414,53,19
+Guanajuato,febrero,39,3.0765,29,11
+Guanajuato,marzo,43,4.013,36,21
+Guanajuato,abril,49,5.58,66,18
+Guanajuato,mayo,61,6.3221,75,18
+Guanajuato,junio,67,5.1605,58,17
+Guanajuato,julio,53,4.1635,62,10
+Guanajuato,agosto,52,5.838,54,10
+Guanajuato,septiembre,53,5.141,56,18
+Guanajuato,octubre,55,5.1782,54,11
+Guanajuato,noviembre,63,6.793,53,15
+Guanajuato,diciembre,75,8.5621,83,22
+Guerrero,enero,25,2.853,22,7
+Guerrero,febrero,27,1.446,13,8
+Guerrero,marzo,34,1.476,28,7
+Guerrero,abril,41,6.174,55,45
+Guerrero,mayo,46,2.6765,47,7
+Guerrero,junio,25,1.257,14,6
+Guerrero,julio,35,2.2372,27,3
+Guerrero,agosto,40,2.5305,23,10
+Guerrero,septiembre,31,4.251,20,9
+Guerrero,octubre,20,2.229,26,7
+Guerrero,noviembre,29,1.446,13,7
+Guerrero,diciembre,40,3.076,24,15
+Hidalgo,enero,5,0.305,3,0
+Hidalgo,febrero,19,1.7255,8,7
+Hidalgo,marzo,23,2.506,13,5
+Hidalgo,abril,23,2.306,16,8
+Hidalgo,mayo,17,1.14,16,7
+Hidalgo,junio,10,0.65,7,5
+Hidalgo,julio,12,0.717,9,2
+Hidalgo,agosto,24,2.574,12,4
+Hidalgo,septiembre,27,1.5865,18,6
+Hidalgo,octubre,43,3.126,19,3
+Hidalgo,noviembre,21,3.36,8,5
+Hidalgo,diciembre,44,2.289,15,6
+Jalisco,enero,45,3.1385,47,10
+Jalisco,febrero,39,4.5885,35,26
+Jalisco,marzo,45,6.4155,26,21
+Jalisco,abril,39,2.8935,10,25
+Jalisco,mayo,49,6.417,37,15
+Jalisco,junio,45,3.986,20,21
+Jalisco,julio,35,3.941,12,5
+Jalisco,agosto,38,2.689,22,11
+Jalisco,septiembre,35,2.183,23,8
+Jalisco,octubre,36,2.244,17,11
+Jalisco,noviembre,31,3.3135,26,8
+Jalisco,diciembre,47,3.61,38,23
+Michoacan,enero,38,7.5305,12,10
+Michoacan,febrero,29,2.2785,22,11
+Michoacan,marzo,40,5.317,20,17
+Michoacan,abril,35,3.1907,17,16
+Michoacan,mayo,39,2.241,32,2
+Michoacan,junio,39,2.926,17,10
+Michoacan,julio,41,4.1125,21,10
+Michoacan,agosto,45,4.0818,36,10
+Michoacan,septiembre,32,2.626,11,9
+Michoacan,octubre,39,2.999,28,9
+Michoacan,noviembre,58,5.286,28,14
+Michoacan,diciembre,34,2.907,11,12
+Morelos,enero,13,1.96,5,0
+Morelos,febrero,20,1.596,22,1
+Morelos,marzo,16,1.1275,32,3
+Morelos,abril,16,1.544,14,4
+Morelos,mayo,19,2.4825,3,3
+Morelos,junio,18,0.857,6,6
+Morelos,julio,14,0.762,6,1
+Morelos,agosto,20,1.7818,5,0
+Morelos,septiembre,16,0.637,8,2
+Morelos,octubre,18,1.707,6,0
+Morelos,noviembre,22,1.261,3,3
+Morelos,diciembre,9,2.705,8,0
+Nayarit,enero,18,1.02,18,12
+Nayarit,febrero,23,5.115,2,6
+Nayarit,marzo,21,1.682,4,5
+Nayarit,abril,20,4.007,14,2
+Nayarit,mayo,19,1.459,6,4
+Nayarit,junio,15,1.71,2,1
+Nayarit,julio,28,4.088,11,4
+Nayarit,agosto,15,1.955,17,7
+Nayarit,septiembre,22,1.543,7,3
+Nayarit,octubre,21,3.045,11,3
+Nayarit,noviembre,25,3.19,11,2
+Nayarit,diciembre,23,2.39,13,3
+Nuevo Leon,enero,53,4.332,52,20
+Nuevo Leon,febrero,39,2.4605,35,7
+Nuevo Leon,marzo,49,6.68,29,10
+Nuevo Leon,abril,50,4.387,24,8
+Nuevo Leon,mayo,53,5.4495,35,14
+Nuevo Leon,junio,60,8.113,27,15
+Nuevo Leon,julio,50,5.384,39,5
+Nuevo Leon,agosto,55,6.2343,29,15
+Nuevo Leon,septiembre,32,5.4903,19,4
+Nuevo Leon,octubre,48,9.64,21,3
+Nuevo Leon,noviembre,46,5.0005,21,8
+Nuevo Leon,diciembre,53,6.5695,31,8
+Oaxaca,enero,19,1.0035,16,3
+Oaxaca,febrero,24,1.449,26,6
+Oaxaca,marzo,27,2.215,31,3
+Oaxaca,abril,32,1.714,38,5
+Oaxaca,mayo,36,3.2065,22,6
+Oaxaca,junio,21,0.857,24,2
+Oaxaca,julio,40,4.37,50,11
+Oaxaca,agosto,29,1.735,29,3
+Oaxaca,septiembre,20,2.114,14,2
+Oaxaca,octubre,26,1.3875,14,5
+Oaxaca,noviembre,16,0.986,19,4
+Oaxaca,diciembre,17,1.135,14,0
+Puebla,enero,27,1.5775,25,8
+Puebla,febrero,31,2.323,19,6
+Puebla,marzo,24,3.1935,28,7
+Puebla,abril,24,1.2285,12,12
+Puebla,mayo,31,2.108,13,8
+Puebla,junio,34,2.769,21,9
+Puebla,julio,45,3.797,35,15
+Puebla,agosto,29,1.712,20,14
+Puebla,septiembre,30,3.095,45,11
+Puebla,octubre,29,2.2775,27,3
+Puebla,noviembre,27,1.5046,4,11
+Puebla,diciembre,40,3.267,36,18
+Queretaro,enero,32,1.4297,16,4
+Queretaro,febrero,24,2.287,9,4
+Queretaro,marzo,33,2.992,18,1
+Queretaro,abril,33,2.5,21,6
+Queretaro,mayo,30,2.352,21,8
+Queretaro,junio,30,2.795,13,1
+Queretaro,julio,25,2.019,10,2
+Queretaro,agosto,37,1.8725,19,14
+Queretaro,septiembre,19,0.774,9,2
+Queretaro,octubre,34,2.045,2,7
+Queretaro,noviembre,25,1.2305,7,4
+Queretaro,diciembre,30,2.7,16,3
+Quintana Roo,enero,24,0.871,19,8
+Quintana Roo,febrero,10,0.403,1,3
+Quintana Roo,marzo,20,1.446,9,3
+Quintana Roo,abril,10,0.8392,13,2
+Quintana Roo,mayo,21,1.495,9,1
+Quintana Roo,junio,7,0.858,5,3
+Quintana Roo,julio,21,2.1,6,11
+Quintana Roo,agosto,15,1.056,3,2
+Quintana Roo,septiembre,16,0.905,7,4
+Quintana Roo,octubre,13,0.905,6,3
+Quintana Roo,noviembre,14,0.919,4,8
+Quintana Roo,diciembre,14,0.9021,9,4
+San Luis Potosi,enero,32,2.4265,13,15
+San Luis Potosi,febrero,27,1.6602,12,14
+San Luis Potosi,marzo,33,6,29,6
+San Luis Potosi,abril,48,4.785,29,13
+San Luis Potosi,mayo,35,5.896,23,15
+San Luis Potosi,junio,42,3.6382,41,9
+San Luis Potosi,julio,35,4.111,33,14
+San Luis Potosi,agosto,40,5.552,32,12
+San Luis Potosi,septiembre,23,1.433,14,8
+San Luis Potosi,octubre,27,1.574,18,6
+San Luis Potosi,noviembre,36,4.265,15,12
+San Luis Potosi,diciembre,42,2.698,32,16
+Sinaloa,enero,31,2.986,24,5
+Sinaloa,febrero,18,1.041,22,7
+Sinaloa,marzo,28,2.091,29,13
+Sinaloa,abril,34,1.863,44,12
+Sinaloa,mayo,20,0.997,10,5
+Sinaloa,junio,31,2.7825,27,7
+Sinaloa,julio,29,2.644,24,9
+Sinaloa,agosto,19,1.345,27,6
+Sinaloa,septiembre,36,2.3725,24,8
+Sinaloa,octubre,23,3.4655,17,5
+Sinaloa,noviembre,24,1.587,24,8
+Sinaloa,diciembre,29,3.136,31,11
+Sonora,enero,27,3.6985,34,9
+Sonora,febrero,20,1.483,26,1
+Sonora,marzo,28,3.021,29,7
+Sonora,abril,26,2.4185,39,9
+Sonora,mayo,13,0.883,30,4
+Sonora,junio,29,4.4865,47,9
+Sonora,julio,29,3.583,32,13
+Sonora,agosto,20,3.098,17,2
+Sonora,septiembre,12,0.874,3,6
+Sonora,octubre,19,2.1675,25,10
+Sonora,noviembre,26,3.1906,19,8
+Sonora,diciembre,12,1.44,12,3
+Tabasco,enero,34,2.2015,14,4
+Tabasco,febrero,25,2.504,7,2
+Tabasco,marzo,50,3.0335,11,8
+Tabasco,abril,47,2.32,23,2
+Tabasco,mayo,36,1.9716,22,3
+Tabasco,junio,25,1.7545,10,10
+Tabasco,julio,40,2.6765,10,4
+Tabasco,agosto,26,1.116,4,2
+Tabasco,septiembre,42,2.4385,16,6
+Tabasco,octubre,27,1.4652,9,2
+Tabasco,noviembre,27,0.879,19,1
+Tabasco,diciembre,58,2.931,18,1
+Tamaulipas,enero,40,7.304,31,13
+Tamaulipas,febrero,32,1.9545,43,9
+Tamaulipas,marzo,23,2.996,14,6
+Tamaulipas,abril,42,5.0175,58,10
+Tamaulipas,mayo,29,3.025,23,9
+Tamaulipas,junio,33,2.315,26,9
+Tamaulipas,julio,34,3.003,62,20
+Tamaulipas,agosto,40,4.3345,41,7
+Tamaulipas,septiembre,49,5.458,34,2
+Tamaulipas,octubre,27,2.1365,19,6
+Tamaulipas,noviembre,33,5.7425,38,14
+Tamaulipas,diciembre,41,7.858,50,29
+Tlaxcala,enero,18,0.578,20,3
+Tlaxcala,febrero,15,1.32,18,1
+Tlaxcala,marzo,26,1.438,13,1
+Tlaxcala,abril,24,1.225,16,0
+Tlaxcala,mayo,15,1.076,13,1
+Tlaxcala,junio,16,0.6795,9,0
+Tlaxcala,julio,20,0.921,13,1
+Tlaxcala,agosto,20,1.403,11,0
+Tlaxcala,septiembre,15,0.658,7,2
+Tlaxcala,octubre,15,1.168,19,1
+Tlaxcala,noviembre,25,1.8212,18,4
+Tlaxcala,diciembre,29,1.534,11,2
+Veracruz,enero,104,9.7526,77,33
+Veracruz,febrero,91,7.1902,56,14
+Veracruz,marzo,103,9.1293,89,22
+Veracruz,abril,125,11.9655,95,24
+Veracruz,mayo,150,8.856,115,21
+Veracruz,junio,98,8.1236,70,18
+Veracruz,julio,94,10.2075,78,20
+Veracruz,agosto,103,7.9767,60,23
+Veracruz,septiembre,106,12.746,53,25
+Veracruz,octubre,117,11.457,57,32
+Veracruz,noviembre,105,9.266,85,25
+Veracruz,diciembre,94,11.265,56,12
+Yucatan,enero,20,2.992,24,8
+Yucatan,febrero,19,1.277,30,1
+Yucatan,marzo,16,0.933,13,7
+Yucatan,abril,20,1.0935,16,6
+Yucatan,mayo,24,1.9625,20,1
+Yucatan,junio,18,1.3993,12,1
+Yucatan,julio,11,1.086,10,3
+Yucatan,agosto,9,1.3,4,0
+Yucatan,septiembre,8,0.618,3,1
+Yucatan,octubre,17,2.0715,14,0
+Yucatan,noviembre,9,0.433,6,1
+Yucatan,diciembre,13,0.8755,16,1
+Zacatecas,enero,31,3.067,44,4
+Zacatecas,febrero,34,3.2672,32,8
+Zacatecas,marzo,39,3.019,39,6
+Zacatecas,abril,50,4.607,54,10
+Zacatecas,mayo,35,3.731,48,2
+Zacatecas,junio,36,2.371,31,8
+Zacatecas,julio,34,3.034,24,8
+Zacatecas,agosto,27,2.097,22,8
+Zacatecas,septiembre,36,2.87,33,8
+Zacatecas,octubre,34,2.469,34,12
+Zacatecas,noviembre,38,3.306,58,12
+Zacatecas,diciembre,58,5.659,46,12
