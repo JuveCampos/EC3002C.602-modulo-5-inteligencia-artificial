@@ -15,12 +15,12 @@ con <- dbConnect(RSQLite::SQLite(), ruta_bd)
 # Listar todas las tablas en la base de datos
 tablas_disponibles <- dbListTables(con)
 print(tablas_disponibles)
-tablas_disponibles %>% writeLines()
 
 # ¿Cuantas tablas tiene la base de datos? 
 
 # La función dplyr::tbl() permite crear tablas sql con evaluación floja para explorar los datos
 ventas <- tbl(con, "ventas")
+proveedores <- tbl(con, "proveedores")
 # Realice la evaluación lazy para el resto de las tablas de la base de datos: 
 # Compras_proveedores, detalle_ventas, empleados, nomina, productos, productos_mas_vendidos, proveedores, rendimiento_empleados, resumen_ventas_sucursal, sucursales, ventas
 # Guarde esas tablas en un objeto de R que tenga el mismo nombre que la tabla 
@@ -51,8 +51,6 @@ query_sql_directo <- tbl(con, sql("
 # Con estas funciones, más lo que sabe de su clase dle viernes, genere las siguientes gráficas: 
 
 # 1) Los cinco productos más vendidos
-
-
 # 2) Los cinco meseros con más ventas
 # 3) Los cinco proveedores con más compras
 

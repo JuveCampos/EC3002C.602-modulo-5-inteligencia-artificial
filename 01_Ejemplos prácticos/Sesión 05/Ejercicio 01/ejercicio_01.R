@@ -5,6 +5,7 @@ library(sf)
 library(ggimage)
 library(wesanderson)
 library(ggrepel)
+library(scales)
 
 # Datos ----
 atus  <- readRDS("datos_atus_2023.rds")
@@ -35,9 +36,35 @@ tabla_accidentes_dia_semana <- atus %>%
   mutate(dia_semana_texto = factor(dia_semana_texto, levels = c("Lunes", "Martes", "Miércoles","Jueves", "Viernes","Sábado", "Domingo")))
 
 # Gráfica 
-tabla_accidentes_dia_semana %>% 
+plot <- tabla_accidentes_dia_semana %>% 
   ggplot(aes(x = dia_semana_texto, y = n)) + 
-  geom_col()
+  geom_col(fill = "#1B318B") + 
+  geom_text(aes(label = paste0(prettyNum(n, big.mark = ","),
+                               "\n", 
+                               "[", round(pp,2), "%]")), 
+            vjust = -0.1, 
+            fontface = "bold"
+            ) + 
+  labs(title = "\nTotal de accidentes por día de la semana", 
+       subtitle = "Accidentes correspondientes al año 2023", 
+       y = "Total de accidentes", 
+       x = NULL, 
+       caption = "Elaboración propia con datos del ATUS (Accidentes de tránsito terrestre en zonas urbanas y suburbanas) del INEGI, 2023") + 
+  scale_y_continuous(expand = expansion(c(0, 0.2)), 
+                     labels = scales::comma_format()
+                     ) + 
+  theme_minimal() + 
+  theme(panel.grid = element_line(color = "white"), 
+        plot.caption = element_text(color = "white"),
+        plot.title = element_text(face = "bold"))
+
+plot
+
+plot_con_fondo <- ggbackground(gg = plot, background = "plantilla.png")
+
+ggsave(plot = plot_con_fondo, filename = "01_grafica_barras.jpeg", 
+       height = 6, width = 9)
+
 
 # 2. Líneas ----# 2. nullfile()Líneas ----
 # Elabore una gráfica de lineas en la cual se muestre la evolución de heridos por día,
@@ -64,6 +91,10 @@ datos_heridos <- atus %>%
 datos_heridos %>% 
   ggplot(aes(x = MES, y = total_heridos, group = tipo_herido)) + 
   geom_line()
+
+colores <- wesanderson::wes_palettes$AsteroidCity2
+"#C52E19" "#AC9765" "#54D8B1" "#b67c3b" "#175149" "#AF4E24"
+
 
 # Mapa ----
 # Genere un mapa de la incidencia de accidentes viales para la Ciudad de México
