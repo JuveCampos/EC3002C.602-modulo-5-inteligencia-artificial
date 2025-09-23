@@ -48,7 +48,7 @@ query_sql_directo <- tbl(con, sql("
   ORDER BY `total_venta` DESC
 "))
 
-# Con estas funciones, más lo que sabe de su clase dle viernes, genere las siguientes gráficas: 
+# Con estas funciones, más lo que sabe de su clase del viernes, genere las siguientes gráficas: 
 
 # 1) Los cinco productos más vendidos
 # 2) Los cinco meseros con más ventas
