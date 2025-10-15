@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jorge Juvenal Campos Ferreira">
+<meta name="dcterms.date" content="2025-10-06">
+
+<title>Análisis de la ENIGH 2024: Desigualdad, Demografía y Redes Sociales en México</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="analisis_enigh_2024_files/libs/clipboard/clipboard.min.js"></script>
+<script src="analisis_enigh_2024_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="analisis_enigh_2024_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="analisis_enigh_2024_files/libs/quarto-html/popper.min.js"></script>
+<script src="analisis_enigh_2024_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="analisis_enigh_2024_files/libs/quarto-html/anchor.min.js"></script>
+<link href="analisis_enigh_2024_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="analisis_enigh_2024_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="analisis_enigh_2024_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="analisis_enigh_2024_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="analisis_enigh_2024_files/libs/bootstrap/bootstrap-8a894fcc3cb5e37eb5bf30def131be2f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Tabla de contenidos</h2>
+   
+  <ul>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción">Introducción</a></li>
+  <li><a href="#configuración-inicial" id="toc-configuración-inicial" class="nav-link" data-scroll-target="#configuración-inicial">Configuración inicial</a></li>
+  <li><a href="#deciles-de-ingreso-per-cápita" id="toc-deciles-de-ingreso-per-cápita" class="nav-link" data-scroll-target="#deciles-de-ingreso-per-cápita">1. Deciles de ingreso per cápita</a>
+  <ul class="collapse">
+  <li><a href="#contexto" id="toc-contexto" class="nav-link" data-scroll-target="#contexto">Contexto</a></li>
+  <li><a href="#metodología" id="toc-metodología" class="nav-link" data-scroll-target="#metodología">Metodología</a></li>
+  <li><a href="#resultados" id="toc-resultados" class="nav-link" data-scroll-target="#resultados">Resultados</a></li>
+  </ul></li>
+  <li><a href="#pirámide-poblacional" id="toc-pirámide-poblacional" class="nav-link" data-scroll-target="#pirámide-poblacional">2. Pirámide poblacional</a>
+  <ul class="collapse">
+  <li><a href="#contexto-1" id="toc-contexto-1" class="nav-link" data-scroll-target="#contexto-1">Contexto</a></li>
+  <li><a href="#metodología-1" id="toc-metodología-1" class="nav-link" data-scroll-target="#metodología-1">Metodología</a></li>
+  <li><a href="#interpretación" id="toc-interpretación" class="nav-link" data-scroll-target="#interpretación">Interpretación</a></li>
+  </ul></li>
+  <li><a href="#adultos-mayores-en-condiciones-de-hacinamiento" id="toc-adultos-mayores-en-condiciones-de-hacinamiento" class="nav-link" data-scroll-target="#adultos-mayores-en-condiciones-de-hacinamiento">3. Adultos mayores en condiciones de hacinamiento</a>
+  <ul class="collapse">
+  <li><a href="#contexto-2" id="toc-contexto-2" class="nav-link" data-scroll-target="#contexto-2">Contexto</a></li>
+  <li><a href="#metodología-2" id="toc-metodología-2" class="nav-link" data-scroll-target="#metodología-2">Metodología</a></li>
+  <li><a href="#hallazgo" id="toc-hallazgo" class="nav-link" data-scroll-target="#hallazgo">Hallazgo</a></li>
+  </ul></li>
+  <li><a href="#ingresos-de-trabajadores-artísticos" id="toc-ingresos-de-trabajadores-artísticos" class="nav-link" data-scroll-target="#ingresos-de-trabajadores-artísticos">4. Ingresos de trabajadores artísticos</a>
+  <ul class="collapse">
+  <li><a href="#contexto-3" id="toc-contexto-3" class="nav-link" data-scroll-target="#contexto-3">Contexto</a></li>
+  <li><a href="#metodología-3" id="toc-metodología-3" class="nav-link" data-scroll-target="#metodología-3">Metodología</a></li>
+  <li><a href="#resultados-y-validación-estadística" id="toc-resultados-y-validación-estadística" class="nav-link" data-scroll-target="#resultados-y-validación-estadística">Resultados y validación estadística</a></li>
+  </ul></li>
+  <li><a href="#focos-ahorradores-e-ingresos" id="toc-focos-ahorradores-e-ingresos" class="nav-link" data-scroll-target="#focos-ahorradores-e-ingresos">5. Focos ahorradores e ingresos</a>
+  <ul class="collapse">
+  <li><a href="#contexto-4" id="toc-contexto-4" class="nav-link" data-scroll-target="#contexto-4">Contexto</a></li>
+  <li><a href="#metodología-4" id="toc-metodología-4" class="nav-link" data-scroll-target="#metodología-4">Metodología</a></li>
+  <li><a href="#interpretación-1" id="toc-interpretación-1" class="nav-link" data-scroll-target="#interpretación-1">Interpretación</a></li>
+  </ul></li>
+  <li><a href="#redes-sociales-por-entidad-federativa" id="toc-redes-sociales-por-entidad-federativa" class="nav-link" data-scroll-target="#redes-sociales-por-entidad-federativa">6. Redes sociales por entidad federativa</a>
+  <ul class="collapse">
+  <li><a href="#contexto-5" id="toc-contexto-5" class="nav-link" data-scroll-target="#contexto-5">Contexto</a></li>
+  <li><a href="#metodología-5" id="toc-metodología-5" class="nav-link" data-scroll-target="#metodología-5">Metodología</a></li>
+  <li><a href="#interpretación-geográfica" id="toc-interpretación-geográfica" class="nav-link" data-scroll-target="#interpretación-geográfica">Interpretación geográfica</a></li>
+  </ul></li>
+  <li><a href="#conclusiones" id="toc-conclusiones" class="nav-link" data-scroll-target="#conclusiones">Conclusiones</a>
+  <ul class="collapse">
+  <li><a href="#aspectos-metodológicos-clave" id="toc-aspectos-metodológicos-clave" class="nav-link" data-scroll-target="#aspectos-metodológicos-clave">Aspectos metodológicos clave</a></li>
+  </ul></li>
+  <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Análisis de la ENIGH 2024: Desigualdad, Demografía y Redes Sociales en México</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jorge Juvenal Campos Ferreira </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 6, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introducción" class="level2">
+<h2 class="anchored" data-anchor-id="introducción">Introducción</h2>
+<p>La Encuesta Nacional de Ingresos y Gastos de los Hogares (ENIGH) 2024 es uno de los instrumentos estadísticos más importantes para comprender la realidad socioeconómica de México. Realizada por el INEGI, esta encuesta proporciona información detallada sobre los ingresos, gastos, características sociodemográficas y condiciones de vida de los hogares mexicanos.</p>
+<p>En este análisis, trabajaremos con los microdatos de la ENIGH 2024 para explorar diferentes dimensiones de la realidad mexicana. Es importante destacar que esta encuesta utiliza un <strong>diseño muestral complejo</strong> con factores de expansión (ponderadores), lo que permite que una muestra relativamente pequeña de hogares sea representativa de toda la población mexicana. Por esta razón, utilizaremos el paquete <code>srvyr</code> de R, que nos permite trabajar correctamente con estos diseños muestrales y obtener estimaciones poblacionales válidas.</p>
+<p>A lo largo de este documento examinaremos:</p>
+<ul>
+<li>La distribución del ingreso por deciles</li>
+<li>La estructura demográfica de la población</li>
+<li>Las condiciones de vivienda de adultos mayores</li>
+<li>Los ingresos de trabajadores artísticos</li>
+<li>La relación entre ahorro energético e ingresos</li>
+<li>La fortaleza de las redes sociales por entidad federativa</li>
+</ul>
+</section>
+<section id="configuración-inicial" class="level2">
+<h2 class="anchored" data-anchor-id="configuración-inicial">Configuración inicial</h2>
+<p>Antes de comenzar, cargamos las librerías necesarias para el análisis. Cada una cumple una función específica:</p>
+<ul>
+<li><code>tidyverse</code>: Para manipulación y visualización de datos</li>
+<li><code>srvyr</code>: Para trabajar con diseños muestrales complejos</li>
+<li><code>foreign</code>: Para leer archivos DBF (formato de los microdatos de INEGI)</li>
+<li><code>scales</code>: Para dar formato a números y etiquetas en gráficas</li>
+<li><code>forcats</code>: Para manejo de variables categóricas (factores)</li>
+<li><code>sf</code>: Para trabajar con datos espaciales y generar mapas</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Librerías</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(srvyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(foreign)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forcats)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="deciles-de-ingreso-per-cápita" class="level2">
+<h2 class="anchored" data-anchor-id="deciles-de-ingreso-per-cápita">1. Deciles de ingreso per cápita</h2>
+<section id="contexto" class="level3">
+<h3 class="anchored" data-anchor-id="contexto">Contexto</h3>
+<p>La desigualdad en la distribución del ingreso es uno de los principales desafíos de México. Los <strong>deciles de ingreso</strong> son una forma de dividir a la población en 10 grupos iguales (cada uno con 10% de la población) ordenados de menor a mayor ingreso. Esto nos permite identificar qué proporción del ingreso total se concentra en los hogares más ricos versus los más pobres.</p>
+</section>
+<section id="metodología" class="level3">
+<h3 class="anchored" data-anchor-id="metodología">Metodología</h3>
+<p>Para este análisis utilizamos el <strong>ingreso per cápita</strong>, es decir, el ingreso total del hogar dividido entre el número de integrantes. Esto nos da una medida más justa de la capacidad económica de cada hogar, ya que un hogar con mayor ingreso absoluto pero más integrantes puede tener menor bienestar que uno con menor ingreso pero menos personas.</p>
+<p>El proceso involucra:</p>
+<ol type="1">
+<li><strong>Cargar el concentrado de hogares</strong>: Este archivo contiene información resumida de cada hogar encuestado</li>
+<li><strong>Calcular el ingreso per cápita</strong>: Dividimos el ingreso corriente total entre el número de integrantes</li>
+<li><strong>Obtener los puntos de corte</strong>: Usando los factores de expansión, calculamos los valores que delimitan cada decil</li>
+<li><strong>Clasificar cada hogar</strong>: Asignamos a cada hogar su decil correspondiente</li>
+<li><strong>Verificar el balance</strong>: Comprobamos que cada decil contenga aproximadamente 10% de los hogares</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargamos datos del concentrado hogar</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Este archivo contiene un resumen de las características de cada hogar</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>conc_hogar <span class="ot">&lt;-</span> <span class="fu">read.dbf</span>(<span class="st">"01_datos/concentradohogar.dbf"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos ingreso per cápita</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Dividimos el ingreso corriente (ing_cor) entre el total de integrantes (tot_integ)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>ing_per_capita <span class="ot">&lt;-</span> conc_hogar <span class="sc">%&gt;%</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(folioviv, foliohog, ing_cor, tot_integ, factor) <span class="sc">%&gt;%</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="at">ing_per_cap =</span> ing_cor<span class="sc">/</span>tot_integ) <span class="sc">%&gt;%</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtenemos los cortes de los cuantiles</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Usamos as_survey_design() para indicar que trabajamos con una encuesta</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># El parámetro weights especifica la variable con los ponderadores</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># survey_quantile() calcula los cuantiles respetando el diseño muestral</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>montos_cuantiles <span class="ot">&lt;-</span> ing_per_capita <span class="sc">%&gt;%</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(<span class="at">weights =</span> factor) <span class="sc">%&gt;%</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">cuantil =</span> <span class="fu">survey_quantile</span>(<span class="at">x =</span> ing_per_cap,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">quantiles =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.1</span>),</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">na.rm =</span> T,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">vartype =</span> <span class="cn">NULL</span>))</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Clasificación por deciles</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Usamos case_when() para crear una variable categórica</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># que asigna cada hogar a su decil correspondiente según su ingreso per cápita</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>hogares_por_cuantil <span class="ot">&lt;-</span> ing_per_capita <span class="sc">%&gt;%</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">decil =</span> <span class="fu">case_when</span>(</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    ing_per_cap <span class="sc">&lt;</span> montos_cuantiles<span class="sc">$</span>cuantil_q10 <span class="sc">~</span> <span class="st">"I"</span>,</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">between</span>(ing_per_cap, montos_cuantiles<span class="sc">$</span>cuantil_q10, montos_cuantiles<span class="sc">$</span>cuantil_q20) <span class="sc">~</span> <span class="st">"II"</span>,</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">between</span>(ing_per_cap, montos_cuantiles<span class="sc">$</span>cuantil_q20, montos_cuantiles<span class="sc">$</span>cuantil_q30) <span class="sc">~</span> <span class="st">"III"</span>,</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">between</span>(ing_per_cap, montos_cuantiles<span class="sc">$</span>cuantil_q30, montos_cuantiles<span class="sc">$</span>cuantil_q40) <span class="sc">~</span> <span class="st">"IV"</span>,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">between</span>(ing_per_cap, montos_cuantiles<span class="sc">$</span>cuantil_q40, montos_cuantiles<span class="sc">$</span>cuantil_q50) <span class="sc">~</span> <span class="st">"V"</span>,</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">between</span>(ing_per_cap, montos_cuantiles<span class="sc">$</span>cuantil_q50, montos_cuantiles<span class="sc">$</span>cuantil_q60) <span class="sc">~</span> <span class="st">"VI"</span>,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">between</span>(ing_per_cap, montos_cuantiles<span class="sc">$</span>cuantil_q60, montos_cuantiles<span class="sc">$</span>cuantil_q70) <span class="sc">~</span> <span class="st">"VII"</span>,</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">between</span>(ing_per_cap, montos_cuantiles<span class="sc">$</span>cuantil_q70, montos_cuantiles<span class="sc">$</span>cuantil_q80) <span class="sc">~</span> <span class="st">"VIII"</span>,</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">between</span>(ing_per_cap, montos_cuantiles<span class="sc">$</span>cuantil_q80, montos_cuantiles<span class="sc">$</span>cuantil_q90) <span class="sc">~</span> <span class="st">"IX"</span>,</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    ing_per_cap <span class="sc">&gt;</span> montos_cuantiles<span class="sc">$</span>cuantil_q90 <span class="sc">~</span> <span class="st">"X"</span>,</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    T <span class="sc">~</span> <span class="cn">NA</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Verificación de balance</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos cuántos hogares (expandidos) hay en cada decil</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co"># y verificamos que sea aproximadamente 10% en cada grupo</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>hogares_por_cuantil <span class="sc">%&gt;%</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(<span class="at">weights =</span> factor) <span class="sc">%&gt;%</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(decil) <span class="sc">%&gt;%</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">survey_count</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pp =</span> <span class="dv">100</span><span class="sc">*</span>(n<span class="sc">/</span><span class="fu">sum</span>(n)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 4
+   decil       n   n_se    pp
+   &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+ 1 I     3882885 52125. 10.00
+ 2 II    3886411 57303. 10.0 
+ 3 III   3880359 59435.  9.99
+ 4 IV    3882538 60535. 10.00
+ 5 IX    3883153 60216. 10.0 
+ 6 V     3883096 59377. 10.0 
+ 7 VI    3883249 60756. 10.0 
+ 8 VII   3882932 61440. 10.00
+ 9 VIII  3883121 61129. 10.0 
+10 X     3882486 62369. 10.00</code></pre>
+</div>
+</div>
+</section>
+<section id="resultados" class="level3">
+<h3 class="anchored" data-anchor-id="resultados">Resultados</h3>
+<p>Como podemos observar en la tabla resultante, la distribución de hogares por decil está correctamente balanceada, con aproximadamente 10% de hogares en cada grupo. Esto confirma que nuestro cálculo de cuantiles fue realizado correctamente y que los factores de expansión están siendo aplicados de manera apropiada.</p>
+</section>
+</section>
+<section id="pirámide-poblacional" class="level2">
+<h2 class="anchored" data-anchor-id="pirámide-poblacional">2. Pirámide poblacional</h2>
+<section id="contexto-1" class="level3">
+<h3 class="anchored" data-anchor-id="contexto-1">Contexto</h3>
+<p>Una <strong>pirámide poblacional</strong> es una representación gráfica de la estructura por edad y sexo de una población. Su forma nos dice mucho sobre el momento demográfico que vive un país: pirámides anchas en la base indican poblaciones jóvenes con alta natalidad, mientras que formas más rectangulares o invertidas sugieren poblaciones envejecidas.</p>
+<p>México se encuentra en una etapa de <strong>transición demográfica</strong>, pasando de ser un país con población muy joven a uno con creciente proporción de adultos mayores. Esta información es crucial para la planeación de políticas públicas en áreas como educación, salud y pensiones.</p>
+</section>
+<section id="metodología-1" class="level3">
+<h3 class="anchored" data-anchor-id="metodología-1">Metodología</h3>
+<p>Trabajamos con el tabulado de población de la ENIGH, que contiene información individual de cada persona en los hogares encuestados. El proceso incluye:</p>
+<ol type="1">
+<li><strong>Validar la población total</strong>: Verificamos que la suma de factores de expansión coincida con la población total de México</li>
+<li><strong>Crear grupos quinquenales</strong>: Agrupamos las edades en intervalos de 5 años (estándar demográfico)</li>
+<li><strong>Calcular población por grupo</strong>: Usando el diseño muestral, estimamos cuántas personas hay en cada combinación de sexo y grupo de edad</li>
+<li><strong>Preparar datos para visualización</strong>: Creamos una variable que permita que hombres y mujeres se grafiquen en lados opuestos</li>
+<li><strong>Generar la pirámide</strong>: Usamos <code>ggplot2</code> para crear la visualización</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargamos datos de población</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Este archivo contiene un registro por cada persona en los hogares encuestados</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>pob <span class="ot">&lt;-</span> <span class="fu">read.dbf</span>(<span class="st">"01_datos/poblacion.dbf"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Verificamos población total</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># La suma de los factores de expansión debe aproximarse a la población total de México</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(pob<span class="sc">$</span>factor) <span class="co"># 130,325,969</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 130325969</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Esta cifra coincide con las estimaciones oficiales de población para 2024</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Creamos grupos quinquenales</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># El estándar demográfico internacional es usar intervalos de 5 años</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Esto facilita comparaciones con otros países y con censos anteriores</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>pob_quinquenal <span class="ot">&lt;-</span> pob <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(folioviv, foliohog, numren, parentesco, sexo, edad, factor) <span class="sc">%&gt;%</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">grupo_quinquenal_edad =</span> <span class="fu">case_when</span>(</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      edad <span class="sc">&lt;</span> <span class="dv">5</span> <span class="sc">~</span> <span class="st">"0 a 4 años"</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">5</span>, <span class="dv">9</span>) <span class="sc">~</span> <span class="st">"5 a 9 años"</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">10</span>, <span class="dv">14</span>) <span class="sc">~</span> <span class="st">"10 a 14 años"</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">15</span>, <span class="dv">19</span>) <span class="sc">~</span> <span class="st">"15 a 19 años"</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">20</span>, <span class="dv">24</span>) <span class="sc">~</span> <span class="st">"20 a 24 años"</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">25</span>, <span class="dv">29</span>) <span class="sc">~</span> <span class="st">"25 a 29 años"</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">30</span>, <span class="dv">34</span>) <span class="sc">~</span> <span class="st">"30 a 34 años"</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">35</span>, <span class="dv">39</span>) <span class="sc">~</span> <span class="st">"35 a 39 años"</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">40</span>, <span class="dv">44</span>) <span class="sc">~</span> <span class="st">"40 a 44 años"</span>,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">45</span>, <span class="dv">49</span>) <span class="sc">~</span> <span class="st">"45 a 49 años"</span>,</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">50</span>, <span class="dv">54</span>) <span class="sc">~</span> <span class="st">"50 a 54 años"</span>,</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">55</span>, <span class="dv">59</span>) <span class="sc">~</span> <span class="st">"55 a 59 años"</span>,</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">60</span>, <span class="dv">64</span>) <span class="sc">~</span> <span class="st">"60 a 64 años"</span>,</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">65</span>, <span class="dv">69</span>) <span class="sc">~</span> <span class="st">"65 a 69 años"</span>,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">70</span>, <span class="dv">74</span>) <span class="sc">~</span> <span class="st">"70 a 74 años"</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>      <span class="fu">between</span>(edad, <span class="dv">75</span>, <span class="dv">79</span>) <span class="sc">~</span> <span class="st">"75 a 79 años"</span>,</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>      edad <span class="sc">&gt;=</span> <span class="dv">80</span> <span class="sc">~</span> <span class="st">"80 años y más"</span>,</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convertimos a factor ordenado para que las categorías aparezcan en orden lógico</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">grupo_quinquenal_edad =</span> <span class="fu">factor</span>(</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>      grupo_quinquenal_edad,</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"0 a 4 años"</span>, <span class="st">"5 a 9 años"</span>, <span class="st">"10 a 14 años"</span>, <span class="st">"15 a 19 años"</span>,</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"20 a 24 años"</span>, <span class="st">"25 a 29 años"</span>, <span class="st">"30 a 34 años"</span>, <span class="st">"35 a 39 años"</span>,</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"40 a 44 años"</span>, <span class="st">"45 a 49 años"</span>, <span class="st">"50 a 54 años"</span>, <span class="st">"55 a 59 años"</span>,</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"60 a 64 años"</span>, <span class="st">"65 a 69 años"</span>, <span class="st">"70 a 74 años"</span>, <span class="st">"75 a 79 años"</span>,</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"80 años y más"</span>),</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>      <span class="at">ordered =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos datos para la pirámide</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="co"># survey_count() respeta el diseño muestral y nos da estimaciones poblacionales</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Incluimos intervalos de confianza (ci) para conocer la precisión de las estimaciones</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>datos_piramide <span class="ot">&lt;-</span> pob_quinquenal <span class="sc">%&gt;%</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(<span class="at">weights =</span> factor) <span class="sc">%&gt;%</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sexo, grupo_quinquenal_edad) <span class="sc">%&gt;%</span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">survey_count</span>(<span class="at">vartype =</span> <span class="st">"ci"</span>)</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Preparamos datos para visualización</span></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="co"># En una pirámide poblacional, por convención, los hombres van a la izquierda (valores negativos)</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="co"># y las mujeres a la derecha (valores positivos)</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>datos_plot <span class="ot">&lt;-</span> datos_piramide <span class="sc">%&gt;%</span></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">sexo =</span> <span class="fu">case_when</span>(</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>      sexo <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"Hombres"</span>,</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>      sexo <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">"Mujeres"</span>),</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_signed =</span> <span class="fu">if_else</span>(sexo <span class="sc">==</span> <span class="st">"Hombres"</span>, <span class="sc">-</span>n, n))</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a><span class="co"># Generamos la pirámide</span></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Usamos coord_flip() para rotar el gráfico y que la edad quede en el eje vertical</span></span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a><span class="co"># geom_text() añade las etiquetas con el número de personas en cada grupo</span></span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_plot, <span class="fu">aes</span>(<span class="at">x =</span> grupo_quinquenal_edad, <span class="at">y =</span> n_signed, <span class="at">fill =</span> sexo)) <span class="sc">+</span></span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">prettyNum</span>(<span class="fu">abs</span>(n_signed), <span class="at">big.mark =</span> <span class="st">","</span>),</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>                <span class="at">hjust =</span> <span class="fu">sign</span>(n_signed) <span class="sc">%&gt;%</span> <span class="fu">as.character</span>())) <span class="sc">+</span></span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_discrete_manual</span>(<span class="at">aesthetics =</span> <span class="st">"hjust"</span>,</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>                        <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"1"</span> <span class="ot">=</span> <span class="sc">-</span><span class="fl">0.1</span>, <span class="st">"-1"</span> <span class="ot">=</span> <span class="fl">1.1</span>)) <span class="sc">+</span></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.1</span>)),</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="cf">function</span>(x) <span class="fu">label_number</span>(<span class="at">big.mark =</span> <span class="st">","</span>)(<span class="fu">abs</span>(x))</span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Hombres"</span> <span class="ot">=</span> <span class="st">"#4575b4"</span>, <span class="st">"Mujeres"</span> <span class="ot">=</span> <span class="st">"#d7301f"</span>)) <span class="sc">+</span></span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Pirámide poblacional por grupos quinquenales"</span>,</span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Grupo quinquenal de edad"</span>,</span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Población (ponderada)"</span>,</span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Sexo"</span></span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line.x =</span> <span class="fu">element_line</span>()</span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="analisis_enigh_2024_files/figure-html/piramide-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretación" class="level3">
+<h3 class="anchored" data-anchor-id="interpretación">Interpretación</h3>
+<p>La pirámide resultante muestra la transición demográfica de México. Podemos observar cómo la base se ha ido estrechando en las últimas décadas (menos nacimientos), mientras que los grupos de edad intermedia son más amplios. Esto refleja el <strong>bono demográfico</strong> que México está experimentando: una gran proporción de población en edad productiva. Sin embargo, también anticipa el desafío futuro del envejecimiento poblacional.</p>
+</section>
+</section>
+<section id="adultos-mayores-en-condiciones-de-hacinamiento" class="level2">
+<h2 class="anchored" data-anchor-id="adultos-mayores-en-condiciones-de-hacinamiento">3. Adultos mayores en condiciones de hacinamiento</h2>
+<section id="contexto-2" class="level3">
+<h3 class="anchored" data-anchor-id="contexto-2">Contexto</h3>
+<p>El <strong>hacinamiento</strong> es un indicador clave de carencia en la vivienda. Se refiere a la situación en que un número excesivo de personas viven en un espacio limitado, lo que puede afectar la salud física y mental, la privacidad y la calidad de vida. En México, el CONEVAL define hacinamiento cuando hay más de 2.5 personas por cuarto para dormir.</p>
+<p>Los adultos mayores son un grupo particularmente vulnerable, y sus condiciones de vivienda son un indicador importante de bienestar y dignidad en esta etapa de la vida.</p>
+</section>
+<section id="metodología-2" class="level3">
+<h3 class="anchored" data-anchor-id="metodología-2">Metodología</h3>
+<p>Para este análisis, combinamos información de dos tabulados:</p>
+<ol type="1">
+<li><strong>Viviendas</strong>: Para obtener el número de cuartos para dormir</li>
+<li><strong>Población</strong>: Para identificar a los adultos mayores (60 años o más)</li>
+</ol>
+<p>El proceso incluye:</p>
+<ol type="1">
+<li>Contar el número total de habitantes por vivienda</li>
+<li>Calcular el índice de hacinamiento (habitantes/cuartos para dormir)</li>
+<li>Clasificar viviendas con más de 2.5 habitantes por cuarto como “hacinamiento”</li>
+<li>Filtrar solo adultos mayores</li>
+<li>Calcular el porcentaje que vive en hacinamiento</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargamos datos de viviendas</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Este archivo contiene características de las viviendas encuestadas</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>viviendas <span class="ot">&lt;-</span> <span class="fu">read.dbf</span>(<span class="st">"01_datos/viviendas.dbf"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraemos el número de cuartos para dormir de cada vivienda</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>cuartos_por_vivienda <span class="ot">&lt;-</span> viviendas <span class="sc">%&gt;%</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(folioviv, cuart_dorm)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos condición de hacinamiento</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Primero ligamos población con datos de vivienda usando folioviv como llave</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>adultos_mayores_condicion_vivienda <span class="ot">&lt;-</span> pob <span class="sc">%&gt;%</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(folioviv, foliohog, edad, factor) <span class="sc">%&gt;%</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(cuartos_por_vivienda) <span class="sc">%&gt;%</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(folioviv) <span class="sc">%&gt;%</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Contamos cuántas personas viven en la vivienda</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_habitantes =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculamos el índice: habitantes por cuarto para dormir</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">habitantes_por_cuarto_dorm =</span> total_habitantes<span class="sc">/</span>cuart_dorm) <span class="sc">%&gt;%</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Clasificamos usando el umbral de 2.5 (criterio CONEVAL)</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cond_hacinamiento =</span> <span class="fu">ifelse</span>(habitantes_por_cuarto_dorm <span class="sc">&gt;</span> <span class="fl">2.5</span>,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">yes =</span> <span class="st">"Hacinamiento"</span>,</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">no =</span> <span class="st">"No hacinamiento"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filtramos solo adultos mayores (60 años o más)</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(edad <span class="sc">&gt;=</span> <span class="dv">60</span>)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos la distribución porcentual</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Usando el diseño muestral para obtener estimaciones poblacionales válidas</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>adultos_mayores_condicion_vivienda <span class="sc">%&gt;%</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(<span class="at">weights =</span> factor) <span class="sc">%&gt;%</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cond_hacinamiento) <span class="sc">%&gt;%</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">survey_count</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pp =</span> <span class="dv">100</span><span class="sc">*</span>(n<span class="sc">/</span><span class="fu">sum</span>(n)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 4
+  cond_hacinamiento        n    n_se    pp
+  &lt;chr&gt;                &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+1 Hacinamiento       1711958  39553.  8.72
+2 No hacinamiento   17920868 100275. 91.3 </code></pre>
+</div>
+</div>
+</section>
+<section id="hallazgo" class="level3">
+<h3 class="anchored" data-anchor-id="hallazgo">Hallazgo</h3>
+<p>Los resultados muestran que <strong>solo el 8.72%</strong> de los adultos mayores en México viven en condiciones de hacinamiento. Esto es una cifra relativamente baja y puede deberse a varios factores:</p>
+<ul>
+<li>Los adultos mayores tienden a vivir en hogares de menor tamaño (hijos ya independizados)</li>
+<li>Muchos han logrado mejorar sus condiciones de vivienda a lo largo de su vida</li>
+<li>Las políticas de vivienda de décadas pasadas pueden haber tenido un impacto positivo</li>
+</ul>
+<p>Sin embargo, esto no significa que no enfrentan otros desafíos habitacionales como accesibilidad, servicios o ubicación.</p>
+</section>
+</section>
+<section id="ingresos-de-trabajadores-artísticos" class="level2">
+<h2 class="anchored" data-anchor-id="ingresos-de-trabajadores-artísticos">4. Ingresos de trabajadores artísticos</h2>
+<section id="contexto-3" class="level3">
+<h3 class="anchored" data-anchor-id="contexto-3">Contexto</h3>
+<p>Los trabajadores del sector artístico y cultural representan un segmento importante de la economía creativa mexicana. Sin embargo, históricamente han enfrentado condiciones laborales precarias, ingresos inestables y falta de protección social. Este análisis nos permite cuantificar su situación económica.</p>
+<p>Utilizamos el <strong>Sistema Nacional de Clasificación de Ocupaciones (SINCO)</strong> del INEGI, que categoriza todas las ocupaciones en México. Específicamente analizamos las categorías:</p>
+<ul>
+<li>2171: Compositores y arreglistas</li>
+<li>2172: Músicos</li>
+<li>2173: Cantantes</li>
+<li>2174: Bailarines y coreógrafos</li>
+<li>2175: Actores</li>
+</ul>
+</section>
+<section id="metodología-3" class="level3">
+<h3 class="anchored" data-anchor-id="metodología-3">Metodología</h3>
+<p>Este es un análisis más complejo que requiere combinar tres fuentes de información:</p>
+<ol type="1">
+<li><strong>Trabajos</strong>: Para identificar a las personas con ocupaciones artísticas (usando código SINCO)</li>
+<li><strong>Población</strong>: Para obtener los factores de expansión</li>
+<li><strong>Ingresos</strong>: Para sumar todos los ingresos de cada persona</li>
+</ol>
+<p>Además, calculamos el <strong>Coeficiente de Variación (CV)</strong> para validar la calidad de nuestras estimaciones. Un CV mayor a 25% indicaría que la muestra es demasiado pequeña para dar estimaciones confiables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargamos datos de trabajos</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Contiene información sobre las ocupaciones de las personas que trabajan</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>trabajos <span class="ot">&lt;-</span> <span class="fu">read.dbf</span>(<span class="st">"01_datos/trabajos.dbf"</span>) <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtramos artistas interpretativos según SINCO</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Usamos filter() con %in% para seleccionar las 5 categorías de interés</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>artistas <span class="ot">&lt;-</span> trabajos <span class="sc">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(folioviv, foliohog, numren, sinco) <span class="sc">%&gt;%</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sinco <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2171</span>, <span class="dv">2172</span>, <span class="dv">2173</span>, <span class="dv">2174</span>, <span class="dv">2175</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Factores de expansión</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Los obtenemos del tabulado de población (cada persona tiene su propio factor)</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>fac_exp <span class="ot">&lt;-</span> pob <span class="sc">%&gt;%</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(folioviv, foliohog, numren, factor)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Ingresos totales por persona</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Una persona puede tener múltiples fuentes de ingreso, por eso agrupamos y sumamos</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co"># ing_tri es el ingreso trimestral (la ENIGH pregunta por ingresos de los últimos 3 meses)</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>ingresos <span class="ot">&lt;-</span> <span class="fu">read.dbf</span>(<span class="st">"01_datos/ingresos.dbf"</span>) <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(folioviv, foliohog, numren, ing_tri) <span class="sc">%&gt;%</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(folioviv, foliohog, numren) <span class="sc">%&gt;%</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">ing_tri_total =</span> <span class="fu">sum</span>(ing_tri, <span class="at">na.rm =</span> T))</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos ingresos de artistas</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Ligamos las tres tablas usando left_join() con las llaves apropiadas</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co"># survey_mean() calcula el promedio respetando el diseño muestral</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>ingresos_artistas <span class="ot">&lt;-</span> artistas <span class="sc">%&gt;%</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(fac_exp) <span class="sc">%&gt;%</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ingresos) <span class="sc">%&gt;%</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(<span class="at">weights =</span> factor) <span class="sc">%&gt;%</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">ingreso_corriente_promedio_trimestral =</span> <span class="fu">survey_mean</span>(ing_tri_total, <span class="at">na.rm =</span> T),</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">ingreso_corriente_promedio_mensual =</span> ingreso_corriente_promedio_trimestral<span class="sc">/</span><span class="dv">3</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Población estimada de artistas</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="co"># survey_count() nos da el total expandido y su error estándar (se)</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Esto nos permite calcular intervalos de confianza (ci)</span></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>artistas <span class="sc">%&gt;%</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(fac_exp) <span class="sc">%&gt;%</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(ingresos) <span class="sc">%&gt;%</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(<span class="at">weights =</span> factor) <span class="sc">%&gt;%</span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">survey_count</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">"ci"</span>, <span class="st">"se"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+       n   n_low   n_upp  n_se
+   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+1 209181 192711. 225651. 8384.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ingresos_artistas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  ingreso_corriente_promedio_tri…¹ ingreso_corriente_pr…² ingreso_corriente_pr…³
+                             &lt;dbl&gt;                  &lt;dbl&gt;                  &lt;dbl&gt;
+1                           37878.                  2592.                 12626.
+# ℹ abbreviated names: ¹​ingreso_corriente_promedio_trimestral,
+#   ²​ingreso_corriente_promedio_trimestral_se,
+#   ³​ingreso_corriente_promedio_mensual
+# ℹ 1 more variable: ingreso_corriente_promedio_mensual_se &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="resultados-y-validación-estadística" class="level3">
+<h3 class="anchored" data-anchor-id="resultados-y-validación-estadística">Resultados y validación estadística</h3>
+<p>Se estima que hay aproximadamente <strong>entre 192,000 y 225,000 artistas</strong> de estas categorías en México, con un punto de estimación cercano a 209,000.</p>
+<p>Para validar la calidad de esta estimación, calculamos el Coeficiente de Variación:</p>
+<p><strong>CV población</strong> = (Error Estándar / Estimación) × 100 = (8,384 / 209,181) × 100 = <strong>4.01%</strong></p>
+<p>Como este valor es mucho menor a 25%, podemos confiar en que la estimación es estadísticamente robusta.</p>
+<p>El <strong>ingreso promedio trimestral</strong> es de aproximadamente <strong>$37,878 pesos</strong>, equivalente a <strong>$12,626 pesos mensuales</strong>. Este ingreso es relativamente bajo considerando que:</p>
+<ul>
+<li>Está por debajo del salario promedio nacional</li>
+<li>No considera la informalidad y estacionalidad del trabajo artístico</li>
+<li>Muchos artistas pueden tener periodos sin ingreso entre proyectos</li>
+</ul>
+</section>
+</section>
+<section id="focos-ahorradores-e-ingresos" class="level2">
+<h2 class="anchored" data-anchor-id="focos-ahorradores-e-ingresos">5. Focos ahorradores e ingresos</h2>
+<section id="contexto-4" class="level3">
+<h3 class="anchored" data-anchor-id="contexto-4">Contexto</h3>
+<p>El uso de <strong>focos ahorradores</strong> (LED o fluorescentes compactos) es un indicador de conciencia ambiental y también puede estar relacionado con el nivel socioeconómico del hogar. Los focos ahorradores requieren mayor inversión inicial pero generan ahorros a largo plazo. Este análisis explora si existe una relación entre su adopción y el nivel de ingresos.</p>
+</section>
+<section id="metodología-4" class="level3">
+<h3 class="anchored" data-anchor-id="metodología-4">Metodología</h3>
+<p>Combinamos información de viviendas y hogares para:</p>
+<ol type="1">
+<li>Identificar qué viviendas reportan tener al menos un foco ahorrador</li>
+<li>Calcular el ingreso corriente promedio de hogares según tengan o no focos ahorradores</li>
+<li>Visualizar la diferencia incluyendo intervalos de confianza</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creamos variable dicotómica: tienen/no tienen focos ahorradores</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># focos_ahor contiene el número de focos ahorradores en la vivienda</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>viviendas_con_focos_ahorradores <span class="ot">&lt;-</span> viviendas <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(folioviv, focos_ahor, factor) <span class="sc">%&gt;%</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tienen_focos_ahorradores =</span> <span class="fu">ifelse</span>(focos_ahor <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(focos_ahor),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">yes =</span> <span class="st">"Tienen focos ahorradores"</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">no =</span> <span class="st">"No tienen focos ahorradores"</span>))</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Porcentaje de viviendas con focos ahorradores</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Esto nos da una idea de qué tan extendida está esta tecnología</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>viviendas_con_focos_ahorradores <span class="sc">%&gt;%</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(<span class="at">weights =</span> factor) <span class="sc">%&gt;%</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tienen_focos_ahorradores) <span class="sc">%&gt;%</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">survey_count</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pp =</span> <span class="dv">100</span><span class="sc">*</span>(n<span class="sc">/</span><span class="fu">sum</span>(n)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 4
+  tienen_focos_ahorradores           n    n_se    pp
+  &lt;chr&gt;                          &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+1 No tienen focos ahorradores  1098725  26555.  2.86
+2 Tienen focos ahorradores    37257317 143483. 97.1 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ingresos según uso de focos ahorradores</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Ligamos hogares con viviendas para conocer tanto ingresos como características de la vivienda</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># survey_mean() con vartype = "ci" nos da intervalos de confianza</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>ingresos_tienen_no_focos_ahorradores <span class="ot">&lt;-</span> conc_hogar <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(folioviv, foliohog, factor, ing_cor) <span class="sc">%&gt;%</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(viviendas_con_focos_ahorradores) <span class="sc">%&gt;%</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(<span class="at">weights =</span> factor) <span class="sc">%&gt;%</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tienen_focos_ahorradores) <span class="sc">%&gt;%</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">ingreso_corriente_hogares =</span> <span class="fu">survey_mean</span>(ing_cor, <span class="at">vartype =</span> <span class="st">"ci"</span>))</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfica comparativa</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># geom_errorbar muestra los intervalos de confianza (incertidumbre de la estimación)</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>ingresos_tienen_no_focos_ahorradores <span class="sc">%&gt;%</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> tienen_focos_ahorradores,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill =</span> tienen_focos_ahorradores,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> ingreso_corriente_hogares)) <span class="sc">+</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ingreso_corriente_hogares_low,</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax =</span> ingreso_corriente_hogares_upp)) <span class="sc">+</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Ingreso promedio por hogares según uso de focos ahorradores"</span>,</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">""</span>,</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Ingreso corriente promedio"</span>,</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="analisis_enigh_2024_files/figure-html/focos-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretación-1" class="level3">
+<h3 class="anchored" data-anchor-id="interpretación-1">Interpretación</h3>
+<p>La gráfica muestra claramente que existe una <strong>relación positiva</strong> entre el ingreso del hogar y el uso de focos ahorradores. Los hogares que reportan tener focos ahorradores tienen, en promedio, mayores ingresos que aquellos que no los tienen.</p>
+<p>Esto puede deberse a varios factores:</p>
+<ul>
+<li><strong>Capacidad de inversión</strong>: Los focos ahorradores tienen mayor costo inicial, accesible para hogares con más recursos</li>
+<li><strong>Nivel educativo</strong>: Hogares con mayores ingresos pueden tener mayor educación y conciencia sobre ahorro energético</li>
+<li><strong>Tipo de vivienda</strong>: Viviendas de mejor calidad (correlacionadas con mayores ingresos) pueden incluir iluminación más moderna</li>
+</ul>
+<p>Las barras de error (intervalos de confianza) son relativamente pequeñas, lo que indica que estas estimaciones son precisas.</p>
+</section>
+</section>
+<section id="redes-sociales-por-entidad-federativa" class="level2">
+<h2 class="anchored" data-anchor-id="redes-sociales-por-entidad-federativa">6. Redes sociales por entidad federativa</h2>
+<section id="contexto-5" class="level3">
+<h3 class="anchored" data-anchor-id="contexto-5">Contexto</h3>
+<p>El <strong>capital social</strong> se refiere a las redes de relaciones sociales que pueden proporcionar apoyo, recursos y oportunidades. La ENIGH 2024 incluye un módulo de redes sociales con seis preguntas sobre qué tan fácil sería para la persona conseguir diferentes tipos de ayuda:</p>
+<ol type="1">
+<li>Ayuda para conseguir trabajo</li>
+<li>Ayuda para que lo cuiden (cuidados personales)</li>
+<li>Préstamo de dinero equivalente a un mes de ingreso</li>
+<li>Acompañamiento al doctor</li>
+<li>Cooperación para mejoras en la colonia</li>
+<li>Cuidado de niños</li>
+</ol>
+<p>Las opciones de respuesta van desde “Imposible conseguirla” hasta “Muy fácil conseguirla”. Consideramos que una persona tiene <strong>redes sociales fuertes</strong> si reporta que sería “fácil” o “muy fácil” conseguir ayuda en al menos 4 de estas 6 dimensiones.</p>
+</section>
+<section id="metodología-5" class="level3">
+<h3 class="anchored" data-anchor-id="metodología-5">Metodología</h3>
+<p>Este análisis implica:</p>
+<ol type="1">
+<li>Recodificar las 6 variables de redes sociales a binarias (0 = difícil/imposible, 1 = fácil/muy fácil)</li>
+<li>Sumar el total de dimensiones “positivas” para cada persona</li>
+<li>Clasificar personas con 4 o más como “redes fuertes”</li>
+<li>Extraer la clave de entidad del folio de vivienda</li>
+<li>Calcular el porcentaje por estado</li>
+<li>Mapear los resultados geográficamente</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargamos población</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>poblacion <span class="ot">&lt;-</span> <span class="fu">read.dbf</span>(<span class="st">"01_datos/poblacion.dbf"</span>) <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Procesamos dimensiones de redes sociales</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># across() permite aplicar la misma transformación a múltiples columnas</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Recodificamos: valores 3 o más (fácil/muy fácil) = 1, otros = 0</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>dimensiones_redes_sociales <span class="ot">&lt;-</span> poblacion <span class="sc">%&gt;%</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(folioviv, foliohog, numren, edad, sexo, factor, <span class="fu">contains</span>(<span class="st">"redsoc"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> redsoc_1<span class="sc">:</span>redsoc_6, <span class="at">.fns =</span> <span class="cf">function</span>(x){</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">=</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(x), <span class="at">yes =</span> <span class="dv">0</span>, <span class="at">no =</span> x)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">=</span> <span class="fu">ifelse</span>(x <span class="sc">&gt;=</span> <span class="dv">3</span>, <span class="at">yes =</span> <span class="dv">1</span>, <span class="at">no =</span> <span class="dv">0</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(x)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  })) <span class="sc">%&gt;%</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sumamos las 6 dimensiones para obtener un puntaje total</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tot =</span> redsoc_1<span class="sc">+</span>redsoc_2<span class="sc">+</span>redsoc_3<span class="sc">+</span>redsoc_4<span class="sc">+</span>redsoc_5<span class="sc">+</span>redsoc_6) <span class="sc">%&gt;%</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Solo consideramos adultos (18 años o más)</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(edad <span class="sc">&gt;=</span> <span class="dv">18</span>)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos porcentaje por estado</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="co"># La clave de entidad está en los primeros 2 caracteres del folioviv</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>porcentaje_redes_sociales <span class="ot">&lt;-</span> dimensiones_redes_sociales <span class="sc">%&gt;%</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cve_ent =</span> <span class="fu">str_sub</span>(folioviv, <span class="dv">1</span>,<span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(cve_ent, <span class="at">.before =</span> folioviv) <span class="sc">%&gt;%</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Clasificamos: 4 o más dimensiones = Redes Fuertes</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fortaleza_redes =</span> <span class="fu">ifelse</span>(tot <span class="sc">&gt;=</span> <span class="dv">4</span>, <span class="at">yes =</span> <span class="st">"Fuertes"</span>, <span class="at">no =</span> <span class="st">"Débiles"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(<span class="at">weights =</span> factor) <span class="sc">%&gt;%</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(fortaleza_redes, cve_ent) <span class="sc">%&gt;%</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">survey_count</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(cve_ent) <span class="sc">%&gt;%</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculamos porcentaje dentro de cada estado</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cve_ent) <span class="sc">%&gt;%</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pp =</span> <span class="dv">100</span><span class="sc">*</span>(n<span class="sc">/</span><span class="fu">sum</span>(n))) <span class="sc">%&gt;%</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nos quedamos solo con el porcentaje de redes fuertes</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(fortaleza_redes <span class="sc">==</span> <span class="st">"Fuertes"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargamos shapefile de México</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="co"># st_read() del paquete sf permite leer datos geoespaciales</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Este archivo GeoJSON contiene las geometrías de los estados de México</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>shp <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">"https://raw.githubusercontent.com/JuveCampos/Shapes_Resiliencia_CDMX_CIDE/master/geojsons/Division%20Politica/DivisionEstatal.geojson"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">cve_ent =</span> CVE_EDO)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `DivisionEstatal' from data source 
+  `https://raw.githubusercontent.com/JuveCampos/Shapes_Resiliencia_CDMX_CIDE/master/geojsons/Division%20Politica/DivisionEstatal.geojson' 
+  using driver `GeoJSON'
+Simple feature collection with 32 features and 7 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: -117.1264 ymin: 14.53401 xmax: -86.74038 ymax: 32.71877
+Geodetic CRS:  WGS 84</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Unimos datos geográficos con nuestros cálculos</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>mapx <span class="ot">&lt;-</span> <span class="fu">left_join</span>(shp, porcentaje_redes_sociales)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mapa temático</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># geom_sf() es la geometría de ggplot2 para datos espaciales</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># scale_fill_gradientn() con viridis proporciona una escala de color colorblind-friendly</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>mapx <span class="sc">%&gt;%</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> pp)) <span class="sc">+</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colors =</span> viridis<span class="sc">::</span><span class="fu">viridis</span>(<span class="at">n =</span> <span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Porcentaje de población adulta con redes sociales fuertes"</span>,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"4 o más dimensiones de apoyo social disponibles"</span>,</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Porcentaje"</span>) <span class="sc">+</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="analisis_enigh_2024_files/figure-html/redes-sociales-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretación-geográfica" class="level3">
+<h3 class="anchored" data-anchor-id="interpretación-geográfica">Interpretación geográfica</h3>
+<p>El mapa resultante permite identificar <strong>patrones espaciales</strong> en la fortaleza de las redes sociales:</p>
+<ul>
+<li><strong>Estados del norte y occidente</strong> pueden mostrar valores más altos, posiblemente relacionados con estructuras familiares más sólidas o comunidades más cohesionadas</li>
+<li><strong>Zonas urbanas grandes</strong> pueden presentar valores más bajos debido a la atomización social en ciudades</li>
+<li><strong>Contextos rurales</strong> tradicionalmente han mostrado redes de apoyo más fuertes basadas en reciprocidad comunitaria</li>
+</ul>
+<p>Esta información es valiosa para diseñar políticas sociales: en estados con redes débiles, el Estado podría necesitar proveer más servicios formales de apoyo, mientras que en estados con redes fuertes se podrían fortalecer programas de organización comunitaria.</p>
+</section>
+</section>
+<section id="conclusiones" class="level2">
+<h2 class="anchored" data-anchor-id="conclusiones">Conclusiones</h2>
+<p>Este análisis de la ENIGH 2024 nos ha permitido explorar múltiples dimensiones de la realidad socioeconómica mexicana:</p>
+<ol type="1">
+<li><strong>Desigualdad</strong>: La construcción de deciles nos da herramientas para medir y monitorear la distribución del ingreso</li>
+<li><strong>Demografía</strong>: La pirámide poblacional confirma la transición demográfica y sus implicaciones para políticas públicas</li>
+<li><strong>Vivienda</strong>: Las condiciones de hacinamiento de adultos mayores son relativamente favorables, aunque persisten otros desafíos</li>
+<li><strong>Trabajo artístico</strong>: Se confirman los bajos ingresos del sector cultural, información útil para políticas de apoyo</li>
+<li><strong>Tecnología y sustentabilidad</strong>: La adopción de focos ahorradores está relacionada con nivel socioeconómico</li>
+<li><strong>Capital social</strong>: Existen importantes variaciones geográficas en la fortaleza de las redes de apoyo</li>
+</ol>
+<section id="aspectos-metodológicos-clave" class="level3">
+<h3 class="anchored" data-anchor-id="aspectos-metodológicos-clave">Aspectos metodológicos clave</h3>
+<p>A lo largo del análisis, hemos aplicado buenas prácticas para trabajar con encuestas complejas:</p>
+<ul>
+<li><strong>Uso correcto de factores de expansión</strong> con el paquete <code>srvyr</code></li>
+<li><strong>Validación de estimaciones</strong> mediante coeficientes de variación</li>
+<li><strong>Cálculo de intervalos de confianza</strong> para cuantificar incertidumbre</li>
+<li><strong>Vinculación de múltiples tabulados</strong> para responder preguntas complejas</li>
+<li><strong>Visualización efectiva</strong> de resultados para facilitar interpretación</li>
+</ul>
+<p>Este tipo de análisis demuestra el enorme valor de los microdatos abiertos que publica el INEGI y cómo pueden ser aprovechados para generar evidencia relevante para la política pública y la investigación social.</p>
+</section>
+</section>
+<section id="referencias" class="level2">
+<h2 class="anchored" data-anchor-id="referencias">Referencias</h2>
+<ul>
+<li><a href="https://www.inegi.org.mx/contenidos/programas/enigh/nc/2024/microdatos/889463924494.pdf">Variables ENIGH 2024</a></li>
+<li><a href="https://www.inegi.org.mx/contenidos/programas/enigh/nc/2024/doc/enigh2024_ns_presentacion_resultados.pdf">Resultados ENIGH 2024</a></li>
+<li><a href="https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/nueva_estruc/702825198411.pdf">Catálogo SINCO</a></li>
+<li><a href="https://www.coneval.org.mx/Medicion/MP/Paginas/Metodologia.aspx">CONEVAL - Metodología de medición multidimensional de la pobreza</a></li>
+</ul>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

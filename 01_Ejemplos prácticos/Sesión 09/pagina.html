@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guía mínima de Web Scraping</title>
+  <meta name="description" content="Página sencilla que ilustra texto, imágenes, tabla y enlaces, con contenido sobre web scraping." />
+  <style>
+    :root{
+      --bg:#f7f7fb;--ink:#222;--muted:#666;--brand:#6950d8;--card:#fff;--border:#e6e6ef;
+    }
+    html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+    header{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+    .wrap{max-width:980px;margin:auto;padding:1.25rem}
+    nav a{margin-right:1rem;text-decoration:none;color:var(--brand);font-weight:600}
+    nav a:hover{text-decoration:underline}
+    h1{color:var(--brand);margin:.5rem 0 0}
+    h2{margin-top:2rem}
+    p{color:var(--ink)}
+    .muted{color:var(--muted)}
+    .grid{display:grid;gap:1rem}
+    .grid-2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    figure{margin:0;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+    figure img{display:block;width:100%;height:auto}
+    figcaption{padding:.75rem;font-size:.9rem;color:var(--muted)}
+    table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+    th,td{padding:.75rem;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+    thead th{background:#f3f3f9;color:#333}
+    tbody tr:last-child td{border-bottom:none}
+    code,kbd,pre{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    pre{background:#0b0b10;color:#eaeaf2;padding:1rem;border-radius:12px;overflow:auto}
+    a{color:var(--brand)}
+    footer{margin-top:3rem;padding:2rem 0;border-top:1px solid var(--border)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem}
+    .note{background:#fff7d6;border-color:#ffe18b}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <nav aria-label="Navegación principal">
+        <a href="#intro">Introducción</a>
+        <a href="#imagenes">Imágenes</a>
+        <a href="#tabla">Tabla</a>
+        <a href="#codigo">Código</a>
+        <a href="#recursos">Recursos</a>
+      </nav>
+      <h1>Guía mínima de Web Scraping</h1>
+      <p class="muted">Una página de ejemplo con párrafos, imágenes, tabla, enlaces y un bloque de código.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="intro">
+      <h2>¿Qué es el web scraping?</h2>
+      <p>El <strong>web scraping</strong> es la técnica de extraer información de páginas web de forma automatizada. Suele apoyarse en herramientas o librerías que descargan HTML, lo analizan (parseo) y luego transforman el contenido en estructuras de datos analizables como tablas.</p>
+      <p>Antes de extraer datos, es buena práctica revisar el archivo <a href="https://www.robotstxt.org/" target="_blank" rel="noopener">robots.txt</a> del sitio y sus <a href="https://es.wikipedia.org/wiki/T%C3%A9rminos_de_servicio" target="_blank" rel="noopener">Términos de Servicio</a>, respetar los límites de uso y no saturar los servidores. También conviene registrar la <em>fuente</em> y la <em>fecha de captura</em> de la información para asegurar trazabilidad.</p>
+      <p>En el ecosistema de datos, el scraping se complementa con APIs oficiales, <em>datasets</em> abiertos y técnicas de limpieza. En R, librerías como <code>rvest</code> o <code>httr2</code> son comunes; en Python, <code>requests</code>, <code>BeautifulSoup</code> o <code>Scrapy</code> son muy utilizadas.</p>
+    </section>
+
+    <section id="imagenes">
+      <h2>Imágenes ilustrativas</h2>
+      <div class="grid grid-2">
+        <figure>
+          <img src="https://picsum.photos/800/500?random=11" alt="Ilustración abstracta de datos" />
+          <figcaption>Figura 1. Visualización imaginaria de extracción de datos web.</figcaption>
+        </figure>
+        <figure>
+          <img src="https://picsum.photos/800/500?random=22" alt="Código y elementos HTML" />
+          <figcaption>Figura 2. El HTML es la materia prima del scraping — etiquetas, atributos y texto.</figcaption>
+        </figure>
+      </div>
+      <p class="muted">Tip: Siempre usa el atributo <code>alt</code> en imágenes para accesibilidad.</p>
+    </section>
+
+    <section id="tabla">
+      <h2>Tabla: checklist básico para scraping responsable</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Paso</th>
+            <th>Qué revisar</th>
+            <th>Detalle / Enlace</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1) Permisos</td>
+            <td>Políticas del sitio y <code>robots.txt</code></td>
+            <td><a href="https://www.robotstxt.org/robotstxt.html" target="_blank" rel="noopener">Formato robots.txt</a></td>
+          </tr>
+          <tr>
+            <td>2) Estructura</td>
+            <td>Identificar selectores CSS / XPath</td>
+            <td><a href="https://developer.mozilla.org/es/docs/Web/CSS/CSS_selectors" target="_blank" rel="noopener">MDN: Selectores CSS</a></td>
+          </tr>
+          <tr>
+            <td>3) Frecuencia</td>
+            <td>Ritmo de peticiones y <em>backoff</em></td>
+            <td><a href="#codigo">Ejemplo de espera entre solicitudes</a></td>
+          </tr>
+          <tr>
+            <td>4) Legalidad</td>
+            <td>Uso permitido de datos</td>
+            <td><a href="https://es.wikipedia.org/wiki/Web_scraping" target="_blank" rel="noopener">Web scraping (Wikipedía)</a></td>
+          </tr>
+          <tr>
+            <td>5) Registro</td>
+            <td>Guardar metadatos (fuente, fecha, versión)</td>
+            <td>Incluye notas en tu <em>pipeline</em> de datos</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Ejemplos de portales de datos abiertos (prefiere APIs cuando existan): <a href="https://www.inegi.org.mx/datos/" target="_blank" rel="noopener">INEGI Datos</a>, <a href="https://datos.gob.mx/" target="_blank" rel="noopener">datos.gob.mx</a>, <a href="https://data.gov/" target="_blank" rel="noopener">data.gov</a>.</p>
+    </section>
+
+    <section id="codigo">
+      <h2>Bloque de código de ejemplo</h2>
+      <div class="card note" role="note">
+        <p><strong>Nota:</strong> Este es un ejemplo meramente didáctico en pseudocódigo/JavaScript para ilustrar selectores y pausas entre peticiones.</p>
+      </div>
+      <pre><code>// Ejemplo didáctico (Node.js + fetch):
+import fetch from "node-fetch";
+import cheerio from "cheerio"; // para parsear HTML
+
+const delay = (ms) =&gt; new Promise(r =&gt; setTimeout(r, ms));
+
+async function scrapeListado(urlBase, paginas=3){
+  const resultados = [];
+  for(let p=1; p&lt;=paginas; p++){
+    const url = `${urlBase}?page=${p}`;
+    const res = await fetch(url, { headers: { 'User-Agent': 'DemoScraper/1.0' }});
+    const html = await res.text();
+    const $ = cheerio.load(html);
+
+    $("article.card").each((_,el) =&gt; {
+      const titulo = $(el).find("h2 a").text().trim();
+      const link = $(el).find("h2 a").attr("href");
+      const fecha = $(el).find("time").attr("datetime");
+      resultados.push({ titulo, link, fecha });
+    });
+
+    // Espera entre solicitudes para no saturar el servidor
+    await delay(1500);
+  }
+  return resultados;
+}
+
+scrapeListado("https://ejemplo.test/blog").then(console.log);
+</code>
+    </pre>
+      <p>También puedes hacerlo en R con <code>rvest</code> o en Python con <code>BeautifulSoup</code>. La lógica es parecida: descargar HTML, extraer nodos por selectores y convertir a tabla.</p>
+    </section>
+
+    <section id="recursos">
+      <h2>Recursos útiles</h2>
+      <ul>
+        <li><a href="https://rvest.tidyverse.org/" target="_blank" rel="noopener">rvest (R)</a> — Scraping con selectores CSS/XPath en R.</li>
+        <li><a href="https://beautiful-soup-4.readthedocs.io/" target="_blank" rel="noopener">BeautifulSoup (Python)</a> — Parseo de HTML y navegación por nodos.</li>
+        <li><a href="https://scrapy.org/" target="_blank" rel="noopener">Scrapy (Python)</a> — <em>Framework</em> robusto para rastreadores y canalizaciones.</li>
+        <li><a href="https://developer.mozilla.org/es/docs/Web/HTML" target="_blank" rel="noopener">MDN HTML</a> — Referencia de las etiquetas HTML.</li>
+      </ul>
+      <p>Si compartes resultados públicamente, incluye siempre <em>créditos</em> y <em>enlaces a la fuente</em> de los datos.
+      </p>
+    </section>
+
+    <section id="extra">
+      <h2>Más párrafos de ejemplo</h2>
+      <p>El scraping es útil para prototipos y exploraciones rápidas. Sin embargo, si el sitio ofrece un endpoint de API, usarlo suele ser más estable y escalable. Además, los contratos de servicio de las APIs especifican límites y condiciones claras.</p>
+      <p>Para mantener trazabilidad, conviene almacenar en tu base de datos la URL original, <em>hash</em> del HTML, marcas de tiempo y versión del parser. Así puedes reproducir resultados y depurar cuando el DOM cambie.</p>
+    </section>
+
+    <footer>
+      <p class="wrap muted">Elaboración propia. Página de demostración para fines educativos. Última actualización: <time datetime="2025-10-07">7 de octubre de 2025</time>.</p>
+    </footer>
+  </main>
+</body>
+</html>
