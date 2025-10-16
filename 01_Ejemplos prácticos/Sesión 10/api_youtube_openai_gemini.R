@@ -21,7 +21,8 @@ library(ellmer)
 
 # ---- 1) Autenticación (OAuth) ----
 # Crea credenciales OAuth 2.0 en Google Cloud (Desktop app)
-# Credenciales cambiadas para que pongan las suyas
+# Estas credenciales son falsas, las dejo para que vean más o menos como se ven. 
+# pongan las suyas una vez que las obtengan
 if (file.exists(".httr-oauth")) unlink(".httr-oauth")
 yt_oauth(app_id     = "936475268268-tp7nmqptblncggsf07pm7r770np01rat.apps.googleusercontent.com",
          app_secret = "G1CSPX-i1sCptqTLhTita7h7pB5UXolO6up")
@@ -59,7 +60,7 @@ respuestas <- lapply(comentarios$textDisplay[1:10], function(c){
 # Estas solo las corre Juve: 
 # Estos son mis tokens (modificadas)
 # Si decides contratar la API de paga, tendrás que poner acá tus contraseñas propias. 
-chat_gpt <- chat_openai(api_key = "sk-proj-jazZdRCfeS_jeEqrAdnTmTngwECRACylQ4GdYkqPPWtk6a4C7kxjzN6Sk3VFQNt91GMWCT3BlbkFwXuraJxSWuZACFualb6fGbOBWpf8pP8bLlkEtr32FWhNjQ2qIrric16fxSOQL4JT0QA")
+chat_gpt <- chat_openai(api_key = "sk-proj-jazZdRCffS_jeEqrAdnTmTngwECRACylQ5GdYkqPPWtk6a4C7kxjzN6Sk3VFQNt91GMWCT3BlbkFwXuraJxSWuZACFualb6fGbOBWpf8pP8bLlkEtr32FWhNjQ2qIrric16fxSOQL4JT0QA")
 chat_gpt$chat("Hola, como estás?")
 
 # Actividad: Tome los primeros 100 comentarios del video del chicharito y analice si están a favor o en contra de su postura
