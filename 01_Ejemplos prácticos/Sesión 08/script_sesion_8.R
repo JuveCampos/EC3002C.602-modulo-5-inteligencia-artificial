@@ -346,5 +346,3 @@ mapx %>%
   theme_minimal() + 
   theme(legend.position = "bottom", 
         axis.text = element_blank())
-
-
