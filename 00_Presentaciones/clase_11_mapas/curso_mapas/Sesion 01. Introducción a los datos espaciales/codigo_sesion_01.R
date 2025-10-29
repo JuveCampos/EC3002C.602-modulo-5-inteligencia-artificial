@@ -131,7 +131,7 @@ mapx <- merge(mun, idh, by.x = "CVEGEO", by.y = "CODGEO")
 # Mapa del IDH para el estado de Morelos: 
 # ¿Qué mas le falta para replicar el del ejercicio? 
 mapx %>%
-  filter(Entidad == "Morelos") %>%
+  filter(Entidad == "Aguascalientes") %>%
   ggplot(aes(fill = Valor)) + 
   geom_sf() + 
   scale_fill_gradientn(

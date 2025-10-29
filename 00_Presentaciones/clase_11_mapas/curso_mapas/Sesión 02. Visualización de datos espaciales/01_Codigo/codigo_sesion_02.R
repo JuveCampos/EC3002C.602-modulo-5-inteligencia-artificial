@@ -15,10 +15,10 @@ library(ggimage)
 shp_ent <- st_read("https://raw.githubusercontent.com/JuveCampos/Shapes_Resiliencia_CDMX_CIDE/master/geojsons/Division%20Politica/DivisionEstatal.geojson")
 
 # Datos del PREP: 
-prep <- read_csv("01_Datos/prep_municipal.csv") %>% mutate(CVE_INEGI = str_pad(CVE_INEGI, width = 5, 
+prep <- read_csv("00_Datos/prep_municipal.csv") %>% mutate(CVE_INEGI = str_pad(CVE_INEGI, width = 5, 
                                                                                side = "left",
                                                                                pad = "0"))
-shp <- st_read("01_Datos/municipios_2022.geojson") %>% mutate(CVEGEO = str_pad(CVEGEO, width = 5, 
+shp <- st_read("00_Datos/municipios_2022.geojson") %>% mutate(CVEGEO = str_pad(CVEGEO, width = 5, 
                                                                                    side = "left",
                                                                                    pad = "0"))
 
