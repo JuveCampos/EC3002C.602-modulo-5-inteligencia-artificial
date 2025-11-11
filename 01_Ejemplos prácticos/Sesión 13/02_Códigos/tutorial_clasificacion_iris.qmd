@@ -1,0 +1,1076 @@
+---
+title: "Tutorial Completo: Clasificación Multiclase con Iris Dataset"
+subtitle: "Árboles de Decisión y Support Vector Machines"
+author: "EC3002C.602 - Módulo 5: Inteligencia Artificial"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    code-fold: false
+    code-tools: true
+    theme: cosmo
+    highlight-style: github
+    df-print: paged
+execute:
+  warning: false
+  message: false
+  cache: false
+editor: visual
+---
+
+# Introducción
+
+Este tutorial presenta un análisis completo de clasificación multiclase utilizando el famoso dataset Iris de Ronald Fisher (1936). Implementaremos y compararemos dos familias de algoritmos: árboles de decisión y Support Vector Machines (SVM).
+
+## ¿Por qué Iris Dataset?
+
+El dataset Iris es fundamental en machine learning por varias razones:
+
+1. **Histórico**: Primer uso de datos reales para análisis discriminante lineal
+2. **Educativo**: Tamaño manejable con patrones claros
+3. **Benchmark**: Estándar para probar nuevos algoritmos
+4. **Balance perfecto**: 50 observaciones por cada una de 3 especies
+5. **Separabilidad**: Una clase linealmente separable, dos requieren métodos no lineales
+
+## Objetivos de Aprendizaje
+
+Al completar este tutorial, serás capaz de:
+
+1. Implementar árboles de decisión para clasificación multiclase
+2. Entender y aplicar Support Vector Machines con diferentes kernels
+3. Realizar tuning de hiperparámetros mediante validación cruzada
+4. Comparar modelos usando métricas apropiadas
+5. Visualizar fronteras de decisión en espacios bidimensionales
+
+## Métodos Cubiertos
+
+- **Árboles de Decisión**: Modelo interpretable basado en reglas
+- **SVM Lineal**: Clasificador de máximo margen para datos linealmente separables
+- **SVM con Kernel RBF**: Extensión no lineal usando el "kernel trick"
+- **SVM Optimizado**: Tuning automático de hiperparámetros
+
+# Configuración Inicial
+
+## Carga de Librerías
+
+```{r setup}
+# Manipulación y visualización de datos
+library(tidyverse)
+
+# Modelado y validación
+library(caret)      # Framework unificado para ML
+library(GGally)     # Matrices de gráficos
+
+# Modelos específicos
+library(rpart)         # Árboles de decisión
+library(rpart.plot)    # Visualización de árboles
+library(e1071)         # SVM
+
+# Configuración
+set.seed(42)
+theme_set(theme_minimal())
+```
+
+**Nota sobre reproducibilidad**: `set.seed(42)` asegura que los resultados sean reproducibles a pesar de la aleatorización en división de datos y algunos algoritmos.
+
+# Carga y Exploración de Datos
+
+## Teoría: El Dataset Iris
+
+**Contexto histórico**: Publicado en 1936 por el estadístico Ronald Fisher en su artículo "The use of multiple measurements in taxonomic problems".
+
+**Variables**:
+
+- `sepal_length`: Longitud del sépalo (cm)
+- `sepal_width`: Ancho del sépalo (cm)
+- `petal_length`: Longitud del pétalo (cm)
+- `petal_width`: Ancho del pétalo (cm)
+- `species`: Especie de iris (Setosa, Versicolor, Virginica)
+
+**Estructura botánica**:
+
+- **Sépalo**: Parte externa de la flor que protege el capullo
+- **Pétalo**: Parte colorida que atrae polinizadores
+
+## Carga de Datos
+
+```{r carga-datos}
+iris_data <- read_csv("01_Datos/datasets_ml/iris.csv",
+                      show_col_types = FALSE)
+
+# Inspección inicial
+print(paste("Dimensiones del dataset:", nrow(iris_data), "filas x",
+            ncol(iris_data), "columnas"))
+
+# Convertir species a factor para análisis de clasificación
+iris_data <- iris_data %>%
+  mutate(species = as.factor(species))
+
+# Estructura del dataset
+glimpse(iris_data)
+```
+
+**Decisión de código**: Convertir `species` a factor es crítico porque:
+
+1. R interpreta factores como variables categóricas
+2. Los algoritmos de clasificación requieren factores para la variable objetivo
+3. Permite visualizaciones con colores automáticos por categoría
+
+## Distribución de Clases
+
+```{r distribucion-clases}
+# Tabla de frecuencias
+tabla_especies <- table(iris_data$species)
+print("Distribución de especies:")
+print(tabla_especies)
+
+# Proporciones
+print("\nProporciones:")
+print(prop.table(tabla_especies))
+
+# Visualización
+iris_data %>%
+  count(species) %>%
+  ggplot(aes(x = species, y = n, fill = species)) +
+  geom_col(alpha = 0.8) +
+  geom_text(aes(label = n), vjust = -0.5, size = 5) +
+  labs(
+    title = "Distribución de Especies en Iris Dataset",
+    x = "Especie",
+    y = "Número de Observaciones"
+  ) +
+  theme(legend.position = "none")
+```
+
+**Observación clave**: Dataset **perfectamente balanceado** (50 observaciones por clase). Esto elimina problemas de clases desbalanceadas que requieren técnicas especiales (SMOTE, pesos de clase, etc.).
+
+# Análisis Exploratorio de Datos
+
+## Estadísticas Descriptivas
+
+```{r estadisticas}
+# Resumen por especie
+iris_data %>%
+  group_by(species) %>%
+  summarise(
+    across(where(is.numeric),
+           list(media = mean, sd = sd),
+           .names = "{.col}_{.fn}"),
+    .groups = "drop"
+  ) %>%
+  print()
+```
+
+## Matriz de Dispersión
+
+```{r pairplot, fig.width=12, fig.height=10}
+# Gráfico de pares coloreado por especie
+ggpairs(iris_data,
+        columns = 1:4,
+        aes(color = species, alpha = 0.5),
+        title = "Matriz de Dispersión - Iris Dataset") +
+  theme_minimal()
+
+ggsave("03_Visualizaciones/iris_pairplot.png",
+       width = 12, height = 10)
+```
+
+**Interpretación**:
+
+- **Diagonal**: Distribución univariada de cada variable
+- **Parte inferior**: Scatterplots bivariados
+- **Parte superior**: Correlaciones por especie
+
+**Patrones visibles**:
+
+1. `petal_length` y `petal_width` muestran separación clara entre especies
+2. Setosa (roja) es linealmente separable del resto
+3. Versicolor y Virginica se solapan parcialmente
+4. Alta correlación entre dimensiones de pétalos (r > 0.9)
+
+## Distribución por Variable y Especie
+
+```{r boxplots, fig.width=10, fig.height=8}
+# Transformar a formato largo para faceting
+iris_long <- iris_data %>%
+  pivot_longer(cols = -species,
+               names_to = "variable",
+               values_to = "valor")
+
+ggplot(iris_long, aes(x = species, y = valor, fill = species)) +
+  geom_boxplot(alpha = 0.7) +
+  facet_wrap(~variable, scales = "free_y") +
+  labs(
+    title = "Distribución de Variables por Especie",
+    x = "Especie",
+    y = "Valor (cm)"
+  ) +
+  theme(legend.position = "bottom")
+
+ggsave("03_Visualizaciones/iris_boxplots.png",
+       width = 10, height = 8)
+```
+
+**Observaciones**:
+
+- **Sepal width**: Mayor solapamiento entre especies
+- **Petal length**: Excelente poder discriminante
+- **Setosa**: Claramente diferente en dimensiones de pétalos
+- **Versicolor vs Virginica**: Requieren combinación de múltiples variables
+
+# División de Datos
+
+## Teoría: Train-Test Split
+
+**Objetivo**: Evaluar el rendimiento del modelo en datos **no vistos** durante el entrenamiento.
+
+**Estrategia común**: 70% entrenamiento, 30% prueba
+
+**División estratificada**: Mantiene la proporción de clases en ambos conjuntos. Esencial cuando:
+
+1. El dataset es pequeño
+2. Las clases están balanceadas y queremos mantenerlo
+3. Queremos resultados más estables
+
+**Alternativa**: Validación cruzada k-fold (divide en k particiones, entrena k veces)
+
+## Implementación
+
+```{r split-datos}
+# División 70-30 estratificada por especie
+train_index <- createDataPartition(iris_data$species,
+                                   p = 0.7,
+                                   list = FALSE)
+
+train_data <- iris_data[train_index, ]
+test_data <- iris_data[-train_index, ]
+
+print(paste("Observaciones de entrenamiento:", nrow(train_data)))
+print(paste("Observaciones de prueba:", nrow(test_data)))
+
+# Verificar que la estratificación mantuvo las proporciones
+print("\nDistribución en entrenamiento:")
+print(table(train_data$species))
+
+print("\nDistribución en prueba:")
+print(table(test_data$species))
+```
+
+**Decisión de código**: `createDataPartition()` de `caret` automáticamente:
+
+- Realiza división estratificada
+- Retorna índices (no los datos directamente)
+- Permite reproducibilidad con `set.seed()`
+
+# Árboles de Decisión
+
+## Teoría: Árboles de Decisión para Clasificación
+
+### Funcionamiento
+
+Los árboles de decisión construyen modelos predictivos mediante divisiones recursivas:
+
+1. **Inicio**: Todo el dataset en nodo raíz
+2. **División**: Seleccionar variable y punto de corte que mejor separa clases
+3. **Recursión**: Aplicar proceso a cada nodo hijo
+4. **Parada**: Cuando se alcanza criterio (pureza, profundidad, tamaño mínimo)
+
+### Criterios de División
+
+**Índice de Gini** (usado por CART):
+
+$$
+\text{Gini} = 1 - \sum_{i=1}^{C} p_i^2
+$$
+
+Donde $p_i$ es la proporción de observaciones de clase $i$ en el nodo.
+
+- Gini = 0: Nodo puro (todas observaciones misma clase)
+- Gini máximo: Distribución uniforme de clases
+
+**Entropía** (usado por C4.5/C5.0):
+
+$$
+\text{Entropy} = -\sum_{i=1}^{C} p_i \log_2(p_i)
+$$
+
+**Objetivo**: Minimizar la impureza ponderada de los nodos hijos
+
+### Parámetro de Complejidad (cp)
+
+El parámetro `cp` (complexity parameter) controla el trade-off sesgo-varianza:
+
+- **cp alto** (ej. 0.1): Árboles simples, menos divisiones, mayor sesgo
+- **cp bajo** (ej. 0.001): Árboles complejos, sobreajuste, mayor varianza
+
+**Poda (pruning)**: Eliminar ramas que no mejoran significativamente el error
+
+### Ventajas
+
+1. **Interpretabilidad**: Fácil explicar decisiones ("Si X > 5, entonces...")
+2. **Sin preprocesamiento**: No requiere escalamiento ni normalización
+3. **Variables mixtas**: Maneja numéricas y categóricas simultáneamente
+4. **No linealidad**: Captura relaciones complejas
+5. **Selección implícita**: Usa solo variables informativas
+
+### Desventajas
+
+1. **Inestabilidad**: Pequeños cambios en datos → árboles muy diferentes
+2. **Sobreajuste**: Sin control, memorizan ruido
+3. **Fronteras rectangulares**: Limitadas en formas de decisión
+4. **Sesgo en variables**: Favorece variables con más valores únicos
+
+## Implementación
+
+```{r arbol-decision}
+# Entrenar árbol de decisión
+# cp = complexity parameter (penaliza árboles complejos)
+tree_model <- rpart(species ~ .,
+                    data = train_data,
+                    method = "class",
+                    control = rpart.control(cp = 0.01))
+
+print("=== Modelo de Árbol de Decisión ===")
+print(tree_model)
+```
+
+**Decisión de código**:
+
+- `method = "class"`: Para clasificación (vs "anova" para regresión)
+- `cp = 0.01`: Valor moderado que balancea complejidad y precisión
+- `species ~ .`: Fórmula que usa todas las demás variables como predictores
+
+## Visualización del Árbol
+
+```{r viz-arbol, fig.width=12, fig.height=8}
+# Visualizar árbol
+rpart.plot(tree_model,
+           main = "Árbol de Decisión - Iris Classification",
+           extra = 104,
+           box.palette = "RdYlGn",
+           shadow.col = "gray",
+           nn = TRUE)
+
+# Guardar visualización
+png("03_Visualizaciones/iris_decision_tree.png",
+    width = 1200, height = 800)
+rpart.plot(tree_model,
+           main = "Árbol de Decisión - Iris Classification",
+           extra = 104,
+           box.palette = "RdYlGn",
+           shadow.col = "gray",
+           nn = TRUE)
+dev.off()
+```
+
+**Interpretación del árbol**:
+
+- **Nodos**: Condiciones de división
+- **Hojas**: Predicción de clase
+- **Colores**: Clase predominante (verde = alta confianza)
+- **Números**: Proporción de clases en cada nodo
+
+**Parámetro `extra = 104`**: Muestra:
+
+- Clase predicha
+- Probabilidad de cada clase
+- Porcentaje de observaciones en el nodo
+
+## Evaluación del Modelo
+
+```{r eval-arbol}
+# Predicciones en conjunto de prueba
+tree_pred <- predict(tree_model, test_data, type = "class")
+
+# Matriz de confusión
+tree_cm <- confusionMatrix(tree_pred, test_data$species)
+
+print("=== Resultados del Árbol de Decisión ===")
+print(paste("Accuracy:", round(tree_cm$overall["Accuracy"], 4)))
+print(paste("Kappa:", round(tree_cm$overall["Kappa"], 4)))
+
+print("\nMatriz de Confusión:")
+print(tree_cm$table)
+
+print("\nMétricas por Clase:")
+print(tree_cm$byClass[, c("Sensitivity", "Specificity", "Pos Pred Value")])
+```
+
+**Métricas importantes**:
+
+- **Accuracy**: Proporción de predicciones correctas
+- **Kappa**: Ajusta por acuerdo aleatorio (más robusto que accuracy)
+- **Sensitivity (Recall)**: Proporción de verdaderos positivos
+- **Specificity**: Proporción de verdaderos negativos
+- **Pos Pred Value (Precision)**: Proporción de positivos predichos que son correctos
+
+# Support Vector Machines (SVM)
+
+## Teoría: Support Vector Machines
+
+### Concepto Fundamental
+
+SVM busca encontrar el **hiperplano óptimo** que mejor separa las clases en el espacio de características.
+
+**Hiperplano**: Subespacio de dimensión $n-1$ en un espacio de $n$ dimensiones
+
+- En 2D: Una línea
+- En 3D: Un plano
+- En n-D: Un hiperplano
+
+### Margen Máximo
+
+**Objetivo**: Maximizar la distancia (margen) entre el hiperplano y los puntos más cercanos de cada clase.
+
+**Vectores de soporte**: Puntos en el margen que definen el hiperplano. Solo estos puntos influyen en el modelo (robustez a outliers).
+
+**Formulación matemática** (caso separable):
+
+$$
+\begin{aligned}
+\text{Minimizar: } & \frac{1}{2} ||\mathbf{w}||^2 \\
+\text{Sujeto a: } & y_i(\mathbf{w}^T\mathbf{x}_i + b) \geq 1, \quad \forall i
+\end{aligned}
+$$
+
+Donde:
+
+- $\mathbf{w}$: Vector normal al hiperplano
+- $b$: Término de sesgo (intercept)
+- $y_i \in \{-1, 1\}$: Etiqueta de clase
+
+### SVM de Margen Suave (Soft Margin)
+
+Para datos **no perfectamente separables**, introducimos variables de holgura $\xi_i$:
+
+$$
+\begin{aligned}
+\text{Minimizar: } & \frac{1}{2} ||\mathbf{w}||^2 + C\sum_{i=1}^{n}\xi_i \\
+\text{Sujeto a: } & y_i(\mathbf{w}^T\mathbf{x}_i + b) \geq 1 - \xi_i, \quad \xi_i \geq 0
+\end{aligned}
+$$
+
+**Parámetro C** (cost):
+
+- **C grande**: Menos violaciones del margen, puede sobreajustar
+- **C pequeño**: Más violaciones, mayor regularización
+
+### Kernel Trick
+
+Para datos **no linealmente separables**, SVM proyecta datos a un espacio de mayor dimensión usando una función kernel $K(\mathbf{x}_i, \mathbf{x}_j)$.
+
+**Kernels comunes**:
+
+1.  **Lineal**: $K(\mathbf{x}_i, \mathbf{x}_j) = \mathbf{x}_i^T\mathbf{x}_j$
+
+    -   Para datos linealmente separables
+    -   Más rápido, más interpretable
+
+2.  **Polinomial**: $K(\mathbf{x}_i, \mathbf{x}_j) = (\gamma\mathbf{x}_i^T\mathbf{x}_j + r)^d$
+
+    -   Captura interacciones hasta grado $d$
+
+3.  **RBF (Radial Basis Function)**: $K(\mathbf{x}_i, \mathbf{x}_j) = \exp(-\gamma||\mathbf{x}_i - \mathbf{x}_j||^2)$
+
+    -   Kernel más popular para no linealidad
+    -   $\gamma$ controla el radio de influencia
+
+4.  **Sigmoide**: $K(\mathbf{x}_i, \mathbf{x}_j) = \tanh(\gamma\mathbf{x}_i^T\mathbf{x}_j + r)$
+
+    -   Similar a redes neuronales
+
+**Ventaja del kernel trick**: No necesitamos calcular explícitamente la transformación $\phi(\mathbf{x})$ a alta dimensión, solo el producto interno.
+
+### Extensión a Multiclase
+
+SVM originalmente es binario. Para multiclase:
+
+1.  **One-vs-Rest (OvR)**: Entrenar $C$ clasificadores (clase i vs resto)
+2.  **One-vs-One (OvO)**: Entrenar $\frac{C(C-1)}{2}$ clasificadores (todos los pares)
+
+**Predicción**: Clase con mayor votación o score
+
+### Ventajas de SVM
+
+1. **Efectivo en alta dimensión**: Cuando $p >> n$
+2. **Eficiente en memoria**: Solo usa vectores de soporte
+3. **Robusto a outliers**: Solo depende de puntos en el margen
+4. **Versátil**: Diferentes kernels para diferentes problemas
+5. **Base teórica sólida**: Fundamentado en teoría de aprendizaje estadístico
+
+### Desventajas de SVM
+
+1. **Costoso computacionalmente**: $O(n^2)$ a $O(n^3)$ para datasets grandes
+2. **Selección de kernel**: No siempre es obvio cuál usar
+3. **Tuning de hiperparámetros**: Requiere validación cruzada exhaustiva
+4. **Interpretabilidad**: Difícil explicar decisiones (caja negra)
+5. **Escalamiento necesario**: Sensible a la escala de variables
+
+## Preprocesamiento: Normalización
+
+```{r normalizacion}
+# Normalizar datos - CRÍTICO para SVM
+preproc <- preProcess(train_data[, -5], method = c("center", "scale"))
+train_scaled <- predict(preproc, train_data)
+test_scaled <- predict(preproc, test_data)
+
+print("=== Estadísticas después de normalización ===")
+train_scaled %>%
+  select(-species) %>%
+  summarise(across(everything(), list(media = mean, sd = sd))) %>%
+  print()
+```
+
+**Por qué normalizar en SVM**:
+
+1. SVM usa distancias euclidianas (sensible a escala)
+2. Variables con mayor rango dominarían el margen
+3. La penalización L2 asume variables en escala similar
+
+**Métodos de normalización**:
+
+- `center`: Restar media (centrar en 0)
+- `scale`: Dividir por desviación estándar (SD = 1)
+
+**Resultado**: Todas las variables con media ≈ 0 y SD = 1
+
+## SVM con Kernel Lineal
+
+```{r svm-lineal}
+# Entrenar SVM con kernel lineal
+svm_linear <- svm(species ~ .,
+                  data = train_scaled,
+                  kernel = "linear",
+                  cost = 1)
+
+svm_linear_pred <- predict(svm_linear, test_scaled)
+svm_linear_cm <- confusionMatrix(svm_linear_pred, test_scaled$species)
+
+print("=== SVM Lineal ===")
+print(paste("Accuracy:", round(svm_linear_cm$overall["Accuracy"], 4)))
+print(paste("Kappa:", round(svm_linear_cm$overall["Kappa"], 4)))
+
+# Número de vectores de soporte
+print(paste("\nNúmero de vectores de soporte:", sum(svm_linear$nSV)))
+print("Por clase:")
+print(svm_linear$nSV)
+```
+
+**Parámetro `cost = 1`**: Valor por defecto que balancea margen y violaciones
+
+**Interpretación**: Si el número de vectores de soporte es bajo, indica separación clara de clases
+
+## SVM con Kernel RBF (Radial)
+
+```{r svm-radial}
+# Entrenar SVM con kernel radial (RBF)
+# El kernel RBF es útil para relaciones no lineales
+svm_radial <- svm(species ~ .,
+                  data = train_scaled,
+                  kernel = "radial",
+                  cost = 1,
+                  gamma = 0.5)
+
+svm_radial_pred <- predict(svm_radial, test_scaled)
+svm_radial_cm <- confusionMatrix(svm_radial_pred, test_scaled$species)
+
+print("=== SVM Radial (RBF) ===")
+print(paste("Accuracy:", round(svm_radial_cm$overall["Accuracy"], 4)))
+print(paste("Kappa:", round(svm_radial_cm$overall["Kappa"], 4)))
+
+print(paste("\nNúmero de vectores de soporte:", sum(svm_radial$nSV)))
+```
+
+**Parámetro `gamma = 0.5`**: Controla el radio de influencia
+
+- **gamma alto**: Influencia local (sobreajuste)
+- **gamma bajo**: Influencia global (subajuste)
+
+**Regla general**: $\gamma = \frac{1}{\text{número de features}}$ (en este caso, 1/4 = 0.25)
+
+## Tuning de Hiperparámetros
+
+### Teoría: Grid Search con Validación Cruzada
+
+**Grid Search**: Búsqueda exhaustiva en una grilla de combinaciones de hiperparámetros
+
+**Proceso**:
+
+1. Definir grid de valores para cada hiperparámetro
+2. Para cada combinación:
+   - Realizar validación cruzada k-fold
+   - Calcular error promedio
+3. Seleccionar combinación con menor error
+
+**Validación cruzada 5-fold**:
+
+- Dividir train set en 5 particiones
+- Entrenar 5 veces (dejando 1 fold como validación)
+- Promediar métricas
+
+```{r tuning-svm}
+# Definir grid de parámetros
+# cost: penalización por violaciones del margen
+# gamma: inverso del radio de influencia de vectores de soporte
+tune_grid <- expand.grid(
+  cost = c(0.1, 1, 10, 100),
+  gamma = c(0.01, 0.1, 0.5, 1, 2)
+)
+
+print(paste("Combinaciones a evaluar:", nrow(tune_grid)))
+
+# Usar tune.svm para encontrar mejores parámetros
+# Realiza validación cruzada internamente
+svm_tune <- tune.svm(species ~ .,
+                     data = train_scaled,
+                     kernel = "radial",
+                     cost = tune_grid$cost,
+                     gamma = tune_grid$gamma,
+                     tunecontrol = tune.control(cross = 5))
+
+print("\n=== Resultados del Tuning ===")
+print(paste("Mejor cost:", svm_tune$best.parameters$cost))
+print(paste("Mejor gamma:", svm_tune$best.parameters$gamma))
+print(paste("Error de validación cruzada:",
+            round(svm_tune$best.performance, 4)))
+
+# Resumen de top 5 combinaciones
+print("\nTop 5 combinaciones:")
+svm_tune$performances %>%
+  arrange(error) %>%
+  head(5) %>%
+  print()
+```
+
+**Interpretación**:
+
+- `best.performance`: Error de clasificación en validación cruzada
+- Si múltiples combinaciones tienen error similar, preferir modelo más simple (C menor, gamma menor)
+
+## Modelo Final Optimizado
+
+```{r svm-optimizado}
+# Entrenar modelo final con mejores parámetros
+svm_best <- svm_tune$best.model
+
+svm_best_pred <- predict(svm_best, test_scaled)
+svm_best_cm <- confusionMatrix(svm_best_pred, test_scaled$species)
+
+print("=== SVM Optimizado ===")
+print(paste("Accuracy:", round(svm_best_cm$overall["Accuracy"], 4)))
+print(paste("Kappa:", round(svm_best_cm$overall["Kappa"], 4)))
+
+print("\nMatriz de Confusión:")
+print(svm_best_cm$table)
+
+print(paste("\nNúmero de vectores de soporte:", sum(svm_best$nSV)))
+```
+
+# Comparación de Modelos
+
+## Tabla de Resultados
+
+```{r comparacion}
+# Crear dataframe con métricas de todos los modelos
+resultados <- tibble(
+  Modelo = c("Árbol de Decisión",
+             "SVM Lineal",
+             "SVM Radial",
+             "SVM Optimizado"),
+  Accuracy = c(tree_cm$overall["Accuracy"],
+               svm_linear_cm$overall["Accuracy"],
+               svm_radial_cm$overall["Accuracy"],
+               svm_best_cm$overall["Accuracy"]),
+  Kappa = c(tree_cm$overall["Kappa"],
+            svm_linear_cm$overall["Kappa"],
+            svm_radial_cm$overall["Kappa"],
+            svm_best_cm$overall["Kappa"])
+) %>%
+  mutate(across(where(is.numeric), ~round(.x, 4))) %>%
+  arrange(desc(Accuracy))
+
+print("=== Comparación de Todos los Modelos ===")
+print(resultados)
+```
+
+## Visualización de Comparación
+
+```{r viz-comparacion, fig.width=10, fig.height=6}
+# Visualizar comparación
+ggplot(resultados, aes(x = reorder(Modelo, Accuracy),
+                       y = Accuracy, fill = Modelo)) +
+  geom_col(alpha = 0.8) +
+  geom_text(aes(label = round(Accuracy, 3)),
+            hjust = -0.2, size = 4) +
+  coord_flip() +
+  ylim(0, 1.1) +
+  labs(
+    title = "Comparación de Accuracy entre Modelos",
+    subtitle = "Iris Classification Task",
+    x = "",
+    y = "Accuracy"
+  ) +
+  theme(legend.position = "none")
+
+ggsave("03_Visualizaciones/iris_model_comparison.png",
+       width = 10, height = 6)
+```
+
+## Análisis de Errores
+
+```{r analisis-errores}
+# Crear dataframe con predicciones del mejor modelo
+errores <- test_scaled %>%
+  mutate(
+    prediccion = svm_best_pred,
+    correcto = (species == prediccion)
+  )
+
+# Casos mal clasificados
+print("=== Casos Mal Clasificados ===")
+errores %>%
+  filter(!correcto) %>%
+  select(sepal_length, sepal_width, petal_length, petal_width,
+         species, prediccion) %>%
+  print()
+
+# Proporción de errores por clase real
+print("\nErrores por Clase Real:")
+errores %>%
+  group_by(species) %>%
+  summarise(
+    total = n(),
+    errores = sum(!correcto),
+    tasa_error = mean(!correcto),
+    .groups = "drop"
+  ) %>%
+  print()
+```
+
+# Visualización de Fronteras de Decisión
+
+## Teoría: Proyección a 2D
+
+Para visualizar fronteras de decisión en modelos con 4 variables:
+
+1. Seleccionar 2 variables más discriminantes
+2. Fijar las otras 2 en su valor medio
+3. Crear grid denso de puntos en el espacio 2D
+4. Predecir clase para cada punto
+5. Visualizar regiones coloreadas
+
+**Limitación**: Solo muestra proyección; fronteras reales son en 4D
+
+## Implementación de Visualización
+
+```{r funcion-fronteras}
+# Función para crear grid de predicciones
+# Usaremos solo 2 variables para poder visualizar en 2D
+create_decision_boundary <- function(model, data, var1, var2, model_type) {
+  # Crear grid de valores
+  x_range <- seq(min(data[[var1]]) - 0.5,
+                 max(data[[var1]]) + 0.5,
+                 length.out = 200)
+  y_range <- seq(min(data[[var2]]) - 0.5,
+                 max(data[[var2]]) + 0.5,
+                 length.out = 200)
+
+  grid <- expand.grid(x = x_range, y = y_range)
+
+  # Crear dataframe con todas las variables necesarias
+  # Usar medias para las variables no visualizadas
+  grid_full <- tibble(
+    sepal_length = if(var1 == "sepal_length") grid$x else mean(data$sepal_length),
+    sepal_width = if(var1 == "sepal_width") grid$x else
+                  if(var2 == "sepal_width") grid$y else mean(data$sepal_width),
+    petal_length = if(var1 == "petal_length") grid$x else
+                   if(var2 == "petal_length") grid$y else mean(data$petal_length),
+    petal_width = if(var1 == "petal_width") grid$x else
+                  if(var2 == "petal_width") grid$y else mean(data$petal_width)
+  )
+
+  # Predecir según tipo de modelo
+  if (model_type == "tree") {
+    grid$prediction <- predict(model, grid_full, type = "class")
+  } else {
+    grid$prediction <- predict(model, grid_full)
+  }
+
+  return(grid)
+}
+```
+
+**Decisión de código**: La función es flexible para cambiar variables y tipos de modelo
+
+## Fronteras del Árbol de Decisión
+
+```{r fronteras-arbol, fig.width=10, fig.height=6}
+# Usar las 2 variables más discriminantes: petal_length y petal_width
+grid_tree <- create_decision_boundary(tree_model,
+                                      train_data,
+                                      "petal_length",
+                                      "petal_width",
+                                      "tree")
+
+ggplot() +
+  geom_tile(data = grid_tree,
+            aes(x = x, y = y, fill = prediction),
+            alpha = 0.3) +
+  geom_point(data = train_data,
+             aes(x = petal_length, y = petal_width, color = species),
+             size = 3,
+             alpha = 0.8) +
+  labs(
+    title = "Fronteras de Decisión - Árbol de Decisión",
+    subtitle = "Proyección en Petal Length vs Petal Width",
+    x = "Petal Length (cm)",
+    y = "Petal Width (cm)",
+    fill = "Predicción",
+    color = "Especie Real"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "right")
+
+ggsave("03_Visualizaciones/iris_tree_boundaries.png",
+       width = 10, height = 6)
+```
+
+**Interpretación**:
+
+- Fronteras **rectangulares** (perpendiculares a ejes)
+- Refleja divisiones sucesivas por umbrales en cada variable
+- Setosa perfectamente separada
+- Zona de confusión entre Versicolor y Virginica
+
+## Fronteras del SVM Optimizado
+
+```{r fronteras-svm, fig.width=10, fig.height=6}
+# Crear visualización para SVM optimizado
+grid_svm <- create_decision_boundary(svm_best,
+                                     train_scaled,
+                                     "petal_length",
+                                     "petal_width",
+                                     "svm")
+
+ggplot() +
+  geom_tile(data = grid_svm,
+            aes(x = x, y = y, fill = prediction),
+            alpha = 0.3) +
+  geom_point(data = train_scaled,
+             aes(x = petal_length, y = petal_width, color = species),
+             size = 3,
+             alpha = 0.8) +
+  labs(
+    title = "Fronteras de Decisión - SVM Optimizado (RBF Kernel)",
+    subtitle = "Proyección en Petal Length vs Petal Width (escalado)",
+    x = "Petal Length (scaled)",
+    y = "Petal Width (scaled)",
+    fill = "Predicción",
+    color = "Especie Real"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "right")
+
+ggsave("03_Visualizaciones/iris_svm_boundaries.png",
+       width = 10, height = 6)
+```
+
+**Interpretación**:
+
+- Fronteras **suaves y curvas** (gracias al kernel RBF)
+- Mayor flexibilidad para separar clases no linealmente separables
+- Mejor adaptación al solapamiento entre Versicolor y Virginica
+
+## Comparación de Fronteras
+
+```{r comparacion-fronteras, fig.width=14, fig.height=6}
+# Lado a lado
+p1 <- ggplot() +
+  geom_tile(data = grid_tree,
+            aes(x = x, y = y, fill = prediction),
+            alpha = 0.3) +
+  geom_point(data = train_data,
+             aes(x = petal_length, y = petal_width, color = species),
+             size = 2) +
+  labs(title = "Árbol de Decisión",
+       x = "Petal Length", y = "Petal Width") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+p2 <- ggplot() +
+  geom_tile(data = grid_svm,
+            aes(x = x, y = y, fill = prediction),
+            alpha = 0.3) +
+  geom_point(data = train_scaled,
+             aes(x = petal_length, y = petal_width, color = species),
+             size = 2) +
+  labs(title = "SVM con Kernel RBF",
+       x = "Petal Length (scaled)", y = "Petal Width (scaled)") +
+  theme_minimal()
+
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+```
+
+**Contraste visual**:
+
+- **Izquierda (Árbol)**: Divisiones ortogonales, regiones rectangulares
+- **Derecha (SVM)**: Curvas suaves, mejor adaptación a geometría de datos
+
+# Conclusiones y Recomendaciones
+
+## Resumen de Resultados
+
+```{r resumen-final}
+print("=== RESUMEN FINAL ===")
+print(resultados)
+
+mejor_modelo <- resultados %>%
+  slice_max(Accuracy, n = 1) %>%
+  pull(Modelo)
+
+print(paste("\nMejor modelo:", mejor_modelo))
+print(paste("Accuracy en test:",
+            round(resultados %>%
+                    filter(Modelo == mejor_modelo) %>%
+                    pull(Accuracy), 4)))
+```
+
+## Lecciones Aprendidas
+
+### 1. Preprocesamiento es Crítico
+
+-   **SVM requiere normalización** (sensible a escala)
+-   **Árboles NO requieren** (invariante a transformaciones monotónicas)
+
+### 2. Kernel Selection
+
+-   **Lineal**: Suficiente si clases son linealmente separables
+-   **RBF**: Más flexible, pero requiere tuning cuidadoso de gamma
+-   **Regla**: Empezar con lineal; si falla, probar RBF
+
+### 3. Tuning de Hiperparámetros
+
+-   **No usar valores por defecto ciegamente**
+-   Grid search con CV es esencial para SVM
+-   Balance entre complejidad del modelo y generalización
+
+### 4. Interpretabilidad vs Performance
+
+-   **Árboles**: Fácil explicar, pero puede subajustar
+-   **SVM**: Mejor rendimiento, pero caja negra
+
+## Comparación Cualitativa
+
+```{r tabla-cualitativa, echo=FALSE}
+tibble(
+  Criterio = c(
+    "Interpretabilidad",
+    "Velocidad de Entrenamiento",
+    "Velocidad de Predicción",
+    "Escalabilidad a Grandes Datos",
+    "Manejo de No Linealidad",
+    "Robustez a Outliers",
+    "Requiere Normalización",
+    "Sensibilidad a Hiperparámetros"
+  ),
+  `Árbol de Decisión` = c(
+    "★★★★★",
+    "★★★★★",
+    "★★★★★",
+    "★★★★☆",
+    "★★★★☆",
+    "★★☆☆☆",
+    "No",
+    "Media"
+  ),
+  `SVM (RBF)` = c(
+    "★☆☆☆☆",
+    "★★☆☆☆",
+    "★★★☆☆",
+    "★★☆☆☆",
+    "★★★★★",
+    "★★★★☆",
+    "Sí",
+    "Alta"
+  )
+) %>%
+  knitr::kable(caption = "Comparación Cualitativa de Métodos")
+```
+
+## Cuándo Usar Cada Método
+
+### Árboles de Decisión
+
+**Casos de uso ideales**:
+
+1. Necesitas explicar decisiones a stakeholders no técnicos
+2. Variables mixtas (numéricas + categóricas)
+3. Dataset moderado (\< 100,000 observaciones)
+4. Prototipado rápido
+
+**Evitar cuando**:
+
+-   Fronteras de decisión complejas y suaves
+-   Alta dimensionalidad sin feature selection
+-   Necesitas máxima precisión predictiva
+
+### SVM
+
+**Casos de uso ideales**:
+
+1. Alta dimensionalidad ($p >> n$)
+2. Fronteras de decisión complejas
+3. Margen claro entre clases
+4. Precisión es prioritaria
+
+**Evitar cuando**:
+
+-   Dataset muy grande ($n > 10^6$)
+-   Interpretabilidad es crítica
+-   Recursos computacionales limitados
+-   Muchas variables categóricas
+
+## Mejoras Futuras
+
+1.  **Ensemble methods**: Combinar árboles (Random Forest, XGBoost)
+2.  **Feature engineering**: Crear interacciones, transformaciones
+3.  **Validación cruzada estratificada**: Para métricas más robustas
+4.  **Análisis de importancia de variables**: Identificar features clave
+5.  **Calibración de probabilidades**: Para decisiones con umbral personalizado
+
+# Referencias y Recursos
+
+## Dataset Original
+
+Fisher, R.A. (1936). "The use of multiple measurements in taxonomic problems". *Annals of Eugenics*, 7(2), 179-188.
+
+## Libros Recomendados
+
+1.  **"An Introduction to Statistical Learning"** - James, Witten, Hastie, Tibshirani
+    -   Capítulo 9: Support Vector Machines
+    -   Capítulo 8: Tree-Based Methods
+2.  **"Pattern Recognition and Machine Learning"** - Christopher Bishop
+    -   Capítulo 7: Sparse Kernel Machines
+3.  **"The Elements of Statistical Learning"** - Hastie, Tibshirani, Friedman
+    -   Tratamiento matemático riguroso
+
+## Documentación de Paquetes
+
+-   [caret package](https://topepo.github.io/caret/) - Framework unificado para ML
+-   [e1071 package](https://cran.r-project.org/web/packages/e1071/) - SVM y más
+-   [rpart package](https://cran.r-project.org/web/packages/rpart/) - Árboles CART
+
+## Recursos en Línea
+
+-   [Scikit-learn SVM Guide](https://scikit-learn.org/stable/modules/svm.html) - Excelente explicación conceptual
+-   [StatQuest Videos](https://www.youtube.com/@statquest) - Explicaciones visuales intuitivas
+-   [Kaggle Iris Competitions](https://www.kaggle.com/datasets/uciml/iris) - Notebooks compartidos
+
+------------------------------------------------------------------------
+
+**Fecha de creación**: `r Sys.Date()`\
+**Curso**: EC3002C.602 - Módulo 5: Inteligencia Artificial\
+**Dataset**: Iris (Fisher, 1936) - 150 observaciones, 3 clases, 4 variables

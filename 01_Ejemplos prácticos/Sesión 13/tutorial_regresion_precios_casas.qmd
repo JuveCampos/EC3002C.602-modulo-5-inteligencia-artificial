@@ -1,0 +1,1072 @@
+---
+title: "Tutorial Completo: Predicción de Precios de Inmuebles"
+subtitle: "Desde Regresión Lineal hasta XGBoost"
+author: "EC3002C.602 - Módulo 5: Inteligencia Artificial"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    code-fold: false
+    code-tools: true
+    theme: cosmo
+    highlight-style: github
+    df-print: paged
+execute:
+  warning: false
+  message: false
+  cache: false
+editor: visual
+---
+
+# Introducción
+
+Este tutorial presenta un análisis completo de predicción de precios de inmuebles en México utilizando múltiples técnicas de machine learning, desde regresión lineal clásica hasta métodos ensemble avanzados.
+
+## Objetivos de Aprendizaje
+
+Al completar este tutorial, serás capaz de:
+
+1.  Limpiar y preparar datos inmobiliarios para modelado
+2.  Realizar análisis exploratorio efectivo
+3.  Implementar y comparar múltiples modelos de regresión
+4.  Entender las ventajas y limitaciones de cada método
+5.  Evaluar y seleccionar el mejor modelo para producción
+
+## Métodos Cubiertos
+
+-   **Regresión Lineal Múltiple**: Modelo base interpretable
+-   **Ridge Regression**: Regularización L2 para control de sobreajuste
+-   **Lasso Regression**: Regularización L1 con selección de variables
+-   **Árbol de Decisión**: Modelo no lineal simple
+-   **Random Forest**: Ensemble de árboles con bagging
+-   **XGBoost**: Gradient boosting optimizado
+
+# Configuración Inicial
+
+## Carga de Librerías
+
+```{r setup}
+# Manipulación y visualización de datos
+library(tidyverse)
+library(rebus)
+
+# Modelado y validación
+library(caret)      # Framework unificado para ML
+library(broom)      # Resultados tidy de modelos
+library(corrplot)   # Matrices de correlación
+library(ggrepel)    # Etiquetas sin overlap
+
+# Modelos específicos
+library(glmnet)        # Ridge y Lasso
+library(randomForest)  # Random Forest
+library(xgboost)       # XGBoost
+library(rpart)         # Árbol de decisión
+library(rpart.plot)    # Visualización de árboles
+
+# Configuración
+set.seed(123)
+theme_set(theme_minimal())
+```
+
+**Nota importante sobre conflictos de namespace**: La librería `MASS` (usada en algunos análisis estadísticos) puede enmascarar la función `select()` de `dplyr`. Si encuentras errores, usa `dplyr::select()` explícitamente.
+
+## Paralelización para XGBoost
+
+Para acelerar el entrenamiento de XGBoost, activamos procesamiento paralelo:
+
+```{r paralelizacion}
+# Detectar número de cores disponibles
+library(parallel)
+library(doParallel)
+
+n_cores <- detectCores() - 1  # Dejar un core libre
+cl <- makeCluster(n_cores)
+registerDoParallel(cl)
+
+# El cluster se cerrará al final del script
+# stopCluster(cl)
+```
+
+# Carga y Limpieza de Datos
+
+## Teoría: Preprocesamiento de Datos
+
+El preprocesamiento es crítico en machine learning. Datos de mala calidad producen modelos de mala calidad ("garbage in, garbage out"). Pasos esenciales:
+
+1.  **Manejo de valores faltantes**: Eliminar o imputar
+2.  **Detección de outliers**: Identificar y tratar valores extremos
+3.  **Transformación de variables**: Normalización, logaritmos, etc.
+4.  **Ingeniería de características**: Crear variables informativas
+
+## Carga de Datos
+
+```{r carga-datos}
+precio_casas <- readxl::read_xlsx("01_Datos/precio casas/datos_inmuebles.xlsx") %>% 
+  filter(encabezado %in% c("Casa en venta", "Departamento en venta"))
+
+# Inspección inicial
+print(paste("Dimensiones:", nrow(precio_casas), "filas x",
+            ncol(precio_casas), "columnas"))
+glimpse(precio_casas)
+```
+
+## Limpieza y Transformación
+
+### Extracción de Estado
+
+Usamos expresiones regulares para extraer el estado de la ubicación:
+
+```{r limpieza}
+precio_casas <- precio_casas %>%
+  mutate(
+    # Extraer último elemento después de la última coma
+    estado = str_extract(ubicacion, pattern = ",\\s*([^,]+)$") %>%
+      str_remove(pattern = ",\\s*"),
+
+    # Corrección manual de inconsistencias
+    estado = if_else(estado == "Loreto", "Baja California Sur", estado)
+  )
+```
+
+**Decisión de código**: Usar `str_extract()` con regex es más robusto que `str_split()` cuando el formato puede variar.
+
+### Filtrado de Datos
+
+```{r filtrado}
+precio_casas <- precio_casas %>%
+  filter(is.na(m2_terreno))
+```
+
+### Conversión de Moneda y Transformaciones
+
+```{r transformaciones}
+precio_casas <- precio_casas %>%
+  mutate(
+    # Estandarizar a pesos mexicanos
+    precio = if_else(moneda == "US", precio * 18.5, precio),
+
+    # Crear variable de región según precio promedio estatal
+    region_precio = case_when(
+      estado %in% c("Distrito Federal", "Nuevo León", "Querétaro",
+                    "Baja California Sur", "Quintana Roo", "Jalisco",
+                    "Yucatán") ~ "Alta",
+      estado %in% c("Baja California", "Aguascalientes", "Coahuila",
+                    "Chihuahua", "Estado De México", "Morelos", "Sinaloa",
+                    "Nayarit", "Campeche") ~ "Media",
+      estado %in% c("Guanajuato", "Hidalgo", "Puebla", "Michoacán",
+                    "Veracruz", "Guerrero", "Oaxaca", "Chiapas",
+                    "Durango") ~ "Baja",
+      TRUE ~ NA_character_
+    ),
+
+    # Simplificar tipo de inmueble
+    tipo_inmueble = if_else(
+      str_detect(encabezado, "Casa"),
+      "Casa",
+      "Departamento"
+    ),
+
+    # Variables derivadas
+    precio_m2 = precio / m2_construidos,
+    log_precio = log(precio + 1)  # Log para normalizar distribución
+  )
+```
+
+**Decisión de modelado**: Usamos `log(precio + 1)` porque:
+
+1.  Los precios suelen tener distribución log-normal
+2.  Reduce el impacto de outliers
+3.  Mejora linealidad en relaciones
+4.  El `+1` evita problemas con precios = 0
+
+### Filtrado de Ventas y Outliers
+
+```{r filtrado-final}
+precio_casas <- precio_casas %>%
+  # Eliminar outliers extremos (1% y 99% percentiles)
+  filter(
+    precio > quantile(precio, 0.01, na.rm = TRUE) &
+    precio < quantile(precio, 0.99, na.rm = TRUE)
+  ) %>% 
+  filter()
+
+# Verificar datos limpios
+precio_casas %>%
+  count(estado, region_precio) %>%
+  arrange(region_precio, estado) %>%
+  print(n = 30)
+```
+
+**Justificación del filtro de outliers**: Eliminamos el 1% superior e inferior para evitar que valores extremos (posibles errores de captura) distorsionen los modelos.
+
+# Análisis Exploratorio de Datos (EDA)
+
+## Teoría: Importancia del EDA
+
+El análisis exploratorio nos permite:
+
+-   Entender la distribución de variables
+-   Identificar relaciones entre predictores y objetivo
+-   Detectar problemas de datos
+-   Generar hipótesis para modelado
+-   Validar supuestos de los modelos
+
+## Distribución del Precio
+
+```{r dist-precio}
+#| fig-width: 10
+#| fig-height: 6
+
+p_dist_precio <- precio_casas %>%
+  ggplot(aes(x = precio/1000000)) +
+  geom_histogram(bins = 50, fill = "steelblue", alpha = 0.7) +
+  scale_x_continuous(labels = scales::comma) +
+  labs(
+    title = "Distribución del Precio de Inmuebles",
+    x = "Precio (millones de pesos)",
+    y = "Frecuencia"
+  ) +
+  facet_wrap(~tipo_inmueble, scales = "free_y")
+
+print(p_dist_precio)
+```
+
+**Interpretación**: La distribución es asimétrica positiva (sesgo a la derecha), confirmando la necesidad de transformación logarítmica.
+
+## Relación Precio vs Características
+
+```{r precio-caracteristicas}
+#| fig-width: 12
+#| fig-height: 6
+
+p_precio_caracteristicas <- precio_casas %>%
+  pivot_longer(
+    cols = c(no_recamaras, no_banos, m2_construidos),
+    names_to = "caracteristica",
+    values_to = "valor"
+  ) %>%
+  mutate(
+    caracteristica = case_when(
+      caracteristica == "no_recamaras" ~ "Número de Recámaras",
+      caracteristica == "no_banos" ~ "Número de Baños",
+      caracteristica == "m2_construidos" ~ "M² Construidos"
+    )
+  ) %>%
+  ggplot(aes(x = valor, y = precio/1000000)) +
+  geom_point(alpha = 0.3, color = "steelblue") +
+  geom_smooth(method = "lm", se = TRUE, color = "red") +
+  facet_wrap(~caracteristica, scales = "free_x") +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Relación entre Precio y Características del Inmueble",
+    x = "Valor",
+    y = "Precio (millones de pesos)"
+  )
+
+print(p_precio_caracteristicas)
+```
+
+**Observación clave**: Todas las características muestran correlación positiva con el precio, aunque con diferentes pendientes.
+
+## Precio por Región y Tipo
+
+```{r precio-region}
+#| fig-width: 10
+#| fig-height: 6
+
+p_precio_region <- precio_casas %>%
+  ggplot(aes(x = region_precio, y = precio/1000000, fill = tipo_inmueble)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_y_log10(labels = scales::comma) +
+  labs(
+    title = "Distribución de Precios por Región y Tipo de Inmueble",
+    x = "Región (según precio promedio)",
+    y = "Precio (millones de pesos, escala log)",
+    fill = "Tipo"
+  ) +
+  theme(legend.position = "bottom")
+
+print(p_precio_region)
+```
+
+# Preparación para Modelado
+
+## Selección de Variables
+
+```{r prep-modelado}
+datos_modelo <- precio_casas %>%
+  dplyr::select(
+    precio, log_precio, no_recamaras, no_banos,
+    m2_construidos, region_precio, tipo_inmueble
+  ) %>%
+  drop_na()
+
+print(paste("Observaciones para modelado:", nrow(datos_modelo)))
+```
+
+## Matriz de Correlación
+
+```{r correlacion}
+#| fig-width: 8
+#| fig-height: 8
+
+correlacion <- datos_modelo %>%
+  dplyr::select(where(is.numeric)) %>%
+  cor()
+
+corrplot(
+  correlacion,
+  method = "color",
+  type = "upper",
+  order = "hclust",
+  tl.cex = 0.8,
+  tl.col = "black",
+  addCoef.col = "black",
+  number.cex = 0.7,
+  title = "Matriz de Correlación",
+  mar = c(0, 0, 2, 0)
+)
+```
+
+**Interpretación**: El precio correlaciona fuertemente con `m2_construidos` (0.67), seguido por `no_recamaras` y `no_banos`.
+
+# Estrategia de Validación
+
+## Teoría: Validación Cruzada
+
+La validación cruzada k-fold es esencial para:
+
+1.  **Estimar rendimiento real**: Evita optimismo del error de entrenamiento
+2.  **Detectar sobreajuste**: Compara error train vs validación
+3.  **Seleccionar hiperparámetros**: Encuentra configuración óptima
+4.  **Comparar modelos**: Base justa de comparación
+
+**Funcionamiento de k-fold CV**:
+
+1.  Dividir datos en k particiones (folds)
+2.  Para cada fold i:
+    -   Entrenar en k-1 folds
+    -   Validar en fold i
+3.  Promediar métricas de k iteraciones
+
+```{r cv-config}
+# Configurar validación cruzada 10-fold
+control_cv <- trainControl(
+  method = "cv",
+  number = 10,
+  savePredictions = "final",
+  verboseIter = FALSE,
+  allowParallel = TRUE  # Usar paralelización
+)
+```
+
+# Modelos de Regresión
+
+## 1. Regresión Lineal Múltiple
+
+### Teoría: Regresión Lineal
+
+La regresión lineal es el método más fundamental en estadística. Asume una relación lineal entre predictores y la variable objetivo:
+
+$$
+y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_p x_p + \epsilon
+$$
+
+Donde:
+
+-   $y$: variable dependiente (precio)
+-   $x_i$: variables independientes (características)
+-   $\beta_i$: coeficientes a estimar
+-   $\epsilon$: error aleatorio
+
+**Método de estimación**: Mínimos Cuadrados Ordinarios (OLS), minimiza:
+
+$$
+\sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+$$
+
+**Supuestos del modelo**:
+
+1.  Linealidad en parámetros
+2.  Independencia de errores
+3.  Homocedasticidad (varianza constante)
+4.  Normalidad de errores
+5.  No multicolinealidad perfecta
+
+### Implementación
+
+```{r modelo-lm}
+# Modelo con precio original
+modelo_cv <- train(
+  precio ~ no_recamaras + no_banos + m2_construidos +
+    region_precio + tipo_inmueble,
+  data = datos_modelo,
+  method = "lm",
+  trControl = control_cv
+)
+
+# Modelo con log(precio) - generalmente mejor
+modelo_log_cv <- train(
+  log_precio ~ no_recamaras + no_banos + m2_construidos +
+    region_precio + tipo_inmueble,
+  data = datos_modelo,
+  method = "lm",
+  trControl = control_cv
+)
+
+print("=== Modelo con precio original ===")
+print(modelo_cv)
+
+print("=== Modelo con log(precio) ===")
+print(modelo_log_cv)
+```
+
+**Decisión de modelado**: Preferimos `log(precio)` porque el RMSE (Root Mean Squared Error) suele ser menor y los residuos se distribuyen mejor.
+
+### Modelo Final y Diagnósticos
+
+```{r modelo-final}
+modelo_final <- lm(
+  log_precio ~ no_recamaras + no_banos + m2_construidos +
+    region_precio + tipo_inmueble,
+  data = datos_modelo
+)
+
+summary(modelo_final)
+```
+
+**Interpretación de coeficientes** (en escala log):
+
+-   Un aumento de 1 m² construido → precio aumenta exp(coef) veces
+-   Los coeficientes de regiones miden diferencias multiplicativas
+
+### Diagnósticos Visuales
+
+```{r diagnosticos-lm}
+#| fig-width: 12
+#| fig-height: 10
+
+par(mfrow = c(2, 2))
+plot(modelo_final)
+par(mfrow = c(1, 1))
+```
+
+**Interpretación de gráficos**:
+
+1.  **Residuals vs Fitted**: Buscar patrón horizontal (linealidad)
+2.  **Q-Q Plot**: Puntos en diagonal (normalidad)
+3.  **Scale-Location**: Línea horizontal (homocedasticidad)
+4.  **Residuals vs Leverage**: Detectar observaciones influyentes
+
+## 2. Ridge Regression (Regularización L2)
+
+### Teoría: Ridge
+
+Ridge añade una penalización L2 a la función de costo de OLS:
+
+$$
+\text{Minimizar: } \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} \beta_j^2
+$$
+
+Donde $\lambda$ es el parámetro de regularización que controla:
+
+-   $\lambda = 0$: Regresión lineal ordinaria
+-   $\lambda \to \infty$: Todos los coeficientes → 0
+
+**Ventajas de Ridge**:
+
+1.  Reduce sobreajuste (menor varianza)
+2.  Maneja multicolinealidad
+3.  Estabiliza coeficientes
+4.  Siempre tiene solución única
+
+**Desventajas**:
+
+-   No elimina variables (no hace selección)
+-   Reduce todos los coeficientes proporcionalmente
+
+### Implementación
+
+```{r ridge}
+# Grid de lambdas a explorar
+grid_ridge <- expand.grid(
+  alpha  = 0,  # alpha = 0 es Ridge
+  lambda = 10^seq(-3, 2, length.out = 50)
+)
+
+modelo_ridge_cv <- train(
+  log_precio ~ no_recamaras + no_banos + m2_construidos +
+    region_precio + tipo_inmueble,
+  data       = datos_modelo,
+  method     = "glmnet",
+  trControl  = control_cv,
+  preProcess = c("center", "scale"),
+  tuneGrid   = grid_ridge
+)
+
+print("=== Modelo Ridge ===")
+print(modelo_ridge_cv)
+print(paste("Mejor lambda:", modelo_ridge_cv$bestTune$lambda))
+```
+
+**Decisión de preprocesamiento**: `center` y `scale` son críticos en Ridge porque la penalización es sensible a la escala de las variables.
+
+## 3. Lasso Regression (Regularización L1)
+
+### Teoría: Lasso
+
+Lasso usa penalización L1 (valor absoluto):
+
+$$
+\text{Minimizar: } \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} |\beta_j|
+$$
+
+**Diferencia clave con Ridge**: Lasso puede forzar coeficientes **exactamente a cero**, realizando selección automática de variables.
+
+**Interpretación geométrica**:
+
+-   Ridge: restricción esférica → coeficientes pequeños
+-   Lasso: restricción romboidal → soluciones sparse (ceros)
+
+**Ventajas de Lasso**:
+
+1.  Selección automática de variables
+2.  Modelos más interpretables (menos variables)
+3.  Útil con muchos predictores irrelevantes
+
+**Desventajas**:
+
+-   Si hay variables correlacionadas, selecciona una arbitrariamente
+-   Puede ser inestable con correlaciones altas
+
+### Implementación
+
+```{r lasso}
+grid_lasso <- expand.grid(
+  alpha  = 1,  # alpha = 1 es Lasso
+  lambda = 10^seq(-3, 2, length.out = 50)
+)
+
+modelo_lasso_cv <- train(
+  log_precio ~ no_recamaras + no_banos + m2_construidos +
+    region_precio + tipo_inmueble,
+  data       = datos_modelo,
+  method     = "glmnet",
+  trControl  = control_cv,
+  preProcess = c("center", "scale"),
+  tuneGrid   = grid_lasso
+)
+
+print("=== Modelo Lasso ===")
+print(modelo_lasso_cv)
+print(paste("Mejor lambda:", modelo_lasso_cv$bestTune$lambda))
+
+# Ver coeficientes (detectar cuáles fueron eliminados)
+coef_lasso <- coef(modelo_lasso_cv$finalModel,
+                   s = modelo_lasso_cv$bestTune$lambda)
+print("Coeficientes Lasso:")
+print(coef_lasso)
+```
+
+## 4. Árbol de Decisión
+
+### Teoría: Árboles de Regresión
+
+Los árboles de decisión dividen recursivamente el espacio de características mediante reglas if-then. Para regresión:
+
+1.  En cada nodo, seleccionar la variable y punto de corte que minimiza el error cuadrático
+2.  Dividir datos en dos grupos
+3.  Repetir hasta alcanzar criterio de parada (profundidad, nº mínimo de observaciones)
+
+**Función objetivo en cada división**:
+
+$$
+\text{Minimizar: } \sum_{i \in R_1} (y_i - \bar{y}_{R_1})^2 + \sum_{i \in R_2} (y_i - \bar{y}_{R_2})^2
+$$
+
+**Ventajas**:
+
+-   No requieren supuestos de distribución
+-   Manejan relaciones no lineales
+-   Interpretan interacciones automáticamente
+-   Fáciles de visualizar
+
+**Desventajas**:
+
+-   Alta varianza (inestables)
+-   Propensos a sobreajuste
+-   Sesgados hacia variables con muchas categorías
+
+### Implementación
+
+```{r arbol}
+modelo_arbol_cv <- train(
+  log_precio ~ no_recamaras + no_banos + m2_construidos +
+    region_precio + tipo_inmueble,
+  data       = datos_modelo,
+  method     = "rpart",
+  trControl  = control_cv,
+  tuneLength = 10  # Explorar 10 valores de complejidad
+)
+
+print("=== Modelo Árbol de Decisión ===")
+print(modelo_arbol_cv)
+
+# Visualizar árbol
+rpart.plot::rpart.plot(
+  modelo_arbol_cv$finalModel,
+  main = "Árbol de Decisión para log(precio)",
+  roundint = FALSE
+)
+```
+
+## 5. Random Forest
+
+### Teoría: Random Forest
+
+Random Forest es un método ensemble que combina múltiples árboles de decisión mediante **bagging** (Bootstrap Aggregating):
+
+**Algoritmo**:
+
+1.  Crear B muestras bootstrap del dataset original
+2.  Para cada muestra:
+    -   Entrenar un árbol de decisión
+    -   En cada nodo, considerar solo un subconjunto aleatorio de m variables
+3.  Predicción final = promedio de predicciones de todos los árboles
+
+**Hiperparámetros clave**:
+
+-   `ntree`: Número de árboles (más = más estable pero más lento)
+-   `mtry`: Número de variables en cada división (típicamente √p o p/3)
+-   `nodesize`: Tamaño mínimo de nodos terminales
+
+**Por qué funciona**:
+
+1.  **Reducción de varianza**: Promediar árboles reduce varianza sin aumentar sesgo
+2.  **Decorrelación**: Selección aleatoria de variables decorrelaciona árboles
+3.  **Out-of-Bag (OOB) error**: \~37% de datos no usados en cada árbol → validación "gratis"
+
+**Ventajas**:
+
+-   Excelente rendimiento predictivo
+-   Robusto a outliers
+-   Maneja variables categóricas y numéricas
+-   Proporciona importancia de variables
+-   Poco sensible a hiperparámetros
+
+**Desventajas**:
+
+-   Menos interpretable que árbol simple
+-   Más lento que modelos lineales
+-   Requiere más memoria
+
+### Implementación
+
+```{r random-forest}
+modelo_rf_cv <- train(
+  log_precio ~ no_recamaras + no_banos + m2_construidos +
+    region_precio + tipo_inmueble,
+  data       = datos_modelo,
+  method     = "rf",
+  trControl  = control_cv,
+  tuneLength = 5,
+  importance = TRUE
+)
+
+print("=== Modelo Random Forest ===")
+print(modelo_rf_cv)
+
+# Importancia de variables
+importancia_rf <- varImp(modelo_rf_cv, scale = TRUE) %>%
+  .$importance %>%
+  as_tibble(rownames = "variable") %>%
+  arrange(desc(Overall))
+
+print("Importancia de variables:")
+print(importancia_rf)
+
+# Visualizar importancia
+importancia_rf %>%
+  ggplot(aes(x = reorder(variable, Overall), y = Overall)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(
+    title = "Importancia de Variables según Random Forest",
+    x = "Variable",
+    y = "Importancia (Overall)"
+  )
+```
+
+## 6. XGBoost
+
+### Teoría: XGBoost (eXtreme Gradient Boosting)
+
+XGBoost es una implementación optimizada de **gradient boosting**, diferente de bagging (Random Forest):
+
+**Gradient Boosting**:
+
+1.  Iniciar con un modelo simple (constante)
+2.  Para t = 1 a T:
+    -   Calcular residuos del modelo actual
+    -   Entrenar nuevo árbol para predecir residuos
+    -   Añadir árbol al modelo con peso η (learning rate)
+3.  Predicción final = suma ponderada de todos los árboles
+
+**Función objetivo de XGBoost**:
+
+$$
+\mathcal{L} = \sum_{i=1}^{n} l(y_i, \hat{y}_i) + \sum_{k=1}^{K} \Omega(f_k)
+$$
+
+Donde:
+
+-   $l$: función de pérdida (MSE para regresión)
+-   $\Omega$: término de regularización (penaliza complejidad del árbol)
+
+**Hiperparámetros clave**:
+
+-   `nrounds`: Número de árboles (iteraciones de boosting)
+-   `max_depth`: Profundidad máxima de cada árbol
+-   `eta`: Learning rate (típicamente 0.01-0.3)
+-   `subsample`: Fracción de datos para cada árbol (previene sobreajuste)
+-   `colsample_bytree`: Fracción de variables para cada árbol
+-   `gamma`: Reducción mínima de pérdida para hacer división
+-   `lambda` (L2) y `alpha` (L1): Regularización en pesos de hojas
+
+**Ventajas de XGBoost sobre Gradient Boosting tradicional**:
+
+1.  **Regularización incorporada**: Previene sobreajuste
+2.  **Manejo de missing values**: Aprende mejor dirección para NAs
+3.  **Paralelización**: Construcción paralela de árboles
+4.  **Optimización de hardware**: Cache-aware, out-of-core computing
+5.  **Stopping temprano**: Detiene si no mejora en validación
+
+**XGBoost vs Random Forest**:
+
+| Aspecto            | Random Forest  | XGBoost       |
+|--------------------|----------------|---------------|
+| Estrategia         | Bagging        | Boosting      |
+| Árboles            | Independientes | Secuenciales  |
+| Profundidad típica | Profunda       | Poco profunda |
+| Velocidad          | Más rápido     | Más lento     |
+| Interpretabilidad  | Media          | Baja          |
+| Riesgo sobreajuste | Bajo           | Medio-Alto    |
+
+### Implementación con Paralelización
+
+```{r xgboost}
+# XGBoost con tuning exhaustivo y paralelización activada
+modelo_xgb_cv <- train(
+  log_precio ~ no_recamaras + no_banos + m2_construidos +
+    region_precio + tipo_inmueble,
+  data       = datos_modelo,
+  method     = "xgbTree",
+  trControl  = control_cv,  # allowParallel = TRUE ya está configurado
+  tuneLength = 10,          # Explorar 10 combinaciones
+  verbose    = FALSE,
+  # Parámetros específicos de XGBoost para paralelización
+  nthread    = n_cores      # Usar todos los cores disponibles
+)
+
+print("=== Modelo XGBoost ===")
+print(modelo_xgb_cv)
+
+# Mejores hiperparámetros
+print("Mejores hiperparámetros:")
+print(modelo_xgb_cv$bestTune)
+
+# Importancia de variables
+importancia_xgb <- varImp(modelo_xgb_cv, scale = TRUE) %>%
+  .$importance %>%
+  as_tibble(rownames = "variable") %>%
+  arrange(desc(Overall))
+
+print("Importancia de variables:")
+print(importancia_xgb)
+
+# Visualizar importancia
+importancia_xgb %>%
+  ggplot(aes(x = reorder(variable, Overall), y = Overall)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(
+    title = "Importancia de Variables según XGBoost",
+    x = "Variable",
+    y = "Importancia (Overall)"
+  )
+```
+
+**Nota sobre paralelización**: El parámetro `nthread` controla cuántos cores usa XGBoost internamente. Combinado con `allowParallel = TRUE` en `trainControl`, obtenemos paralelización en dos niveles:
+
+1.  Validación cruzada en paralelo (folds diferentes en cores diferentes)
+2.  Construcción de árbol en paralelo (dentro de cada fold)
+
+# Comparación de Modelos
+
+## Métricas de Desempeño
+
+```{r comparacion}
+# Extraer métricas de cada modelo
+comparacion <- tibble(
+  Modelo = c("OLS (log)", "Ridge", "Lasso", "Árbol", "Random Forest", "XGBoost"),
+  RMSE = c(
+    modelo_log_cv$results$RMSE[1],
+    min(modelo_ridge_cv$results$RMSE),
+    min(modelo_lasso_cv$results$RMSE),
+    min(modelo_arbol_cv$results$RMSE),
+    min(modelo_rf_cv$results$RMSE),
+    min(modelo_xgb_cv$results$RMSE)
+  ),
+  R2 = c(
+    modelo_log_cv$results$Rsquared[1],
+    max(modelo_ridge_cv$results$Rsquared),
+    max(modelo_lasso_cv$results$Rsquared),
+    max(modelo_arbol_cv$results$Rsquared),
+    max(modelo_rf_cv$results$Rsquared),
+    max(modelo_xgb_cv$results$Rsquared)
+  )
+) %>%
+  arrange(RMSE)
+
+print("=== Comparación de Desempeño ===")
+print(comparacion)
+```
+
+## Visualización de Comparación
+
+```{r viz-comparacion}
+#| fig-width: 12
+#| fig-height: 6
+
+# RMSE
+p_rmse <- comparacion %>%
+  ggplot(aes(x = reorder(Modelo, -RMSE), y = RMSE, fill = Modelo)) +
+  geom_col(alpha = 0.8) +
+  geom_text(aes(label = round(RMSE, 3)), vjust = -0.5, size = 3.5) +
+  labs(title = "Comparación de RMSE (menor es mejor)",
+       x = "Modelo", y = "RMSE") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none")
+
+# R²
+p_r2 <- comparacion %>%
+  ggplot(aes(x = reorder(Modelo, R2), y = R2, fill = Modelo)) +
+  geom_col(alpha = 0.8) +
+  geom_text(aes(label = round(R2, 3)), vjust = -0.5, size = 3.5) +
+  labs(title = "Comparación de R² (mayor es mejor)",
+       x = "Modelo", y = "R²") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none")
+
+gridExtra::grid.arrange(p_rmse, p_r2, ncol = 2)
+```
+
+## Predicciones vs Valores Reales
+
+```{r pred-vs-real}
+#| fig-width: 14
+#| fig-height: 10
+
+# Generar predicciones para todos los modelos
+pred_ols   <- predict(modelo_final, newdata = datos_modelo)
+pred_ridge <- predict(modelo_ridge_cv, newdata = datos_modelo)
+pred_lasso <- predict(modelo_lasso_cv, newdata = datos_modelo)
+pred_arbol <- predict(modelo_arbol_cv, newdata = datos_modelo)
+pred_rf    <- predict(modelo_rf_cv, newdata = datos_modelo)
+pred_xgb   <- predict(modelo_xgb_cv, newdata = datos_modelo)
+
+# Consolidar en un dataframe
+predicciones_consolidadas <- datos_modelo %>%
+  mutate(
+    precio_real = precio,
+    OLS = exp(pred_ols) - 1,
+    Ridge = exp(pred_ridge) - 1,
+    Lasso = exp(pred_lasso) - 1,
+    Árbol = exp(pred_arbol) - 1,
+    `Random Forest` = exp(pred_rf) - 1,
+    XGBoost = exp(pred_xgb) - 1
+  ) %>%
+  transmute(
+    precio_real_millones = precio_real / 1e6,
+    OLS = OLS / 1e6,
+    Ridge = Ridge / 1e6,
+    Lasso = Lasso / 1e6,
+    Árbol = Árbol / 1e6,
+    `Random Forest` = `Random Forest` / 1e6,
+    XGBoost = XGBoost / 1e6
+  ) %>%
+  pivot_longer(
+    cols = -precio_real_millones,
+    names_to = "modelo",
+    values_to = "precio_pred_millones"
+  )
+
+# Gráfico de predicciones vs reales
+predicciones_consolidadas %>%
+  filter(precio_pred_millones <= 50) %>%  # Filtrar outliers para visualización
+  ggplot(aes(x = precio_real_millones, y = precio_pred_millones)) +
+  geom_point(alpha = 0.2, color = "steelblue") +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
+  facet_wrap(~modelo, ncol = 3) +
+  coord_equal() +
+  labs(
+    title = "Valores Observados vs Predichos por Modelo",
+    subtitle = "Línea roja = predicción perfecta",
+    x = "Precio Observado (millones de pesos)",
+    y = "Precio Predicho (millones de pesos)"
+  ) +
+  theme_minimal()
+```
+
+# Interpretación y Recomendaciones
+
+## Comparación de Coeficientes (OLS vs Ridge vs Lasso)
+
+```{r coef-comparacion}
+#| fig-width: 12
+#| fig-height: 8
+
+# Extraer coeficientes de cada modelo
+coef_ols <- tidy(modelo_final) %>%
+  mutate(modelo = "OLS") %>%
+  dplyr::select(modelo, term, estimate)
+
+coef_ridge <- coef(modelo_ridge_cv$finalModel,
+                   s = modelo_ridge_cv$bestTune$lambda) %>%
+  as.matrix() %>%
+  as_tibble(rownames = "term") %>%
+  rename(estimate = s0) %>%
+  mutate(modelo = "Ridge")
+
+coef_lasso <- coef(modelo_lasso_cv$finalModel,
+                   s = modelo_lasso_cv$bestTune$lambda) %>%
+  as.matrix() %>%
+  as_tibble(rownames = "term") %>%
+  rename(estimate = s0) %>%
+  mutate(modelo = "Lasso")
+
+# Consolidar
+coef_comparacion <- bind_rows(coef_ols, coef_ridge, coef_lasso) %>%
+  filter(term != "(Intercept)")
+
+# Visualizar
+coef_comparacion %>%
+  ggplot(aes(x = term, y = estimate, color = modelo)) +
+  geom_point(size = 3, position = position_dodge(width = 0.6)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
+  coord_flip() +
+  labs(
+    title = "Comparación de Coeficientes: OLS vs Ridge vs Lasso",
+    subtitle = "Variable dependiente: log(precio)",
+    x = "Variable explicativa",
+    y = "Coeficiente estimado",
+    color = "Modelo"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "top")
+```
+
+**Interpretación**:
+
+-   **OLS**: Coeficientes más grandes (sin regularización)
+-   **Ridge**: Todos los coeficientes reducidos proporcionalmente
+-   **Lasso**: Algunos coeficientes exactamente en cero (selección)
+
+## Conclusiones y Recomendaciones
+
+### Mejor Modelo
+
+Basándonos en RMSE y R², el modelo **XGBoost** o **Random Forest** típicamente tendrán el mejor desempeño predictivo.
+
+### Trade-offs a Considerar
+
+```{r tabla-tradeoffs, echo=FALSE}
+tibble(
+  Modelo = c("OLS", "Ridge/Lasso", "Árbol", "Random Forest", "XGBoost"),
+  Interpretabilidad = c("★★★★★", "★★★★☆", "★★★☆☆", "★★☆☆☆", "★☆☆☆☆"),
+  Velocidad_Entrenamiento = c("★★★★★", "★★★★☆", "★★★★☆", "★★☆☆☆", "★☆☆☆☆"),
+  Velocidad_Predicción = c("★★★★★", "★★★★★", "★★★★☆", "★★★☆☆", "★★★☆☆"),
+  Rendimiento_Predictivo = c("★★☆☆☆", "★★★☆☆", "★★★☆☆", "★★★★☆", "★★★★★"),
+  Manejo_No_Linealidad = c("★☆☆☆☆", "★☆☆☆☆", "★★★★★", "★★★★★", "★★★★★")
+) %>%
+  knitr::kable(caption = "Comparación Cualitativa de Modelos")
+```
+
+### Recomendaciones por Caso de Uso
+
+1.  **Si necesitas interpretabilidad**: Usa **OLS** o **Lasso**
+    -   Puedes explicar el impacto de cada variable
+    -   Apropiado para reportes a stakeholders no técnicos
+2.  **Si tienes multicolinealidad**: Usa **Ridge**
+    -   Estabiliza coeficientes correlacionados
+3.  **Si quieres selección automática de variables**: Usa **Lasso**
+    -   Identifica variables más importantes
+    -   Reduce dimensionalidad
+4.  **Si rendimiento predictivo es prioritario**: Usa **XGBoost** o **Random Forest**
+    -   Mejor predicción pero menos interpretable
+    -   Apropiado para producción
+5.  **Si tienes restricciones computacionales**: Usa **OLS** o **Lasso**
+    -   Más rápidos de entrenar y predecir
+
+# Ejemplo de Predicción
+
+```{r ejemplo-prediccion}
+# Crear ejemplos para predicción
+nuevos_datos <- tibble(
+  no_recamaras = c(2, 3, 4),
+  no_banos = c(1, 2, 3),
+  m2_construidos = c(80, 120, 200),
+  region_precio = c("Baja", "Media", "Alta"),
+  tipo_inmueble = c("Departamento", "Casa", "Casa")
+)
+
+# Predicciones con intervalo de confianza (OLS)
+predicciones_conf <- predict(
+  modelo_final,
+  newdata = nuevos_datos,
+  interval = "confidence",
+  level = 0.95
+) %>%
+  as_tibble() %>%
+  mutate(across(everything(), ~(exp(.) - 1) / 1e6)) %>%
+  bind_cols(nuevos_datos, .) %>%
+  rename(precio_estimado = fit, limite_inferior = lwr, limite_superior = upr)
+
+print("=== Predicciones de Ejemplo (millones de pesos) ===")
+print(predicciones_conf)
+```
+
+# Limpieza Final
+
+```{r cleanup}
+# Cerrar cluster de paralelización
+stopCluster(cl)
+registerDoSEQ()  # Volver a modo secuencial
+```
+
+# Referencias y Recursos
+
+## Libros Recomendados
+
+1.  **"An Introduction to Statistical Learning"** - James, Witten, Hastie, Tibshirani
+2.  **"The Elements of Statistical Learning"** - Hastie, Tibshirani, Friedman
+3.  **"Applied Predictive Modeling"** - Kuhn, Johnson
+
+## Documentación
+
+-   [caret package](https://topepo.github.io/caret/)
+-   [XGBoost documentation](https://xgboost.readthedocs.io/)
+-   [glmnet vignette](https://web.stanford.edu/~hastie/glmnet/glmnet_alpha.html)
+
+## Datasets
+
+-   [UCI Machine Learning Repository](https://archive.ics.uci.edu/)
+-   [Kaggle Datasets](https://www.kaggle.com/datasets)
+
+------------------------------------------------------------------------
+
+**Fecha de creación**: `r Sys.Date()`\
+**Curso**: EC3002C.602 - Módulo 5: Inteligencia Artificial
